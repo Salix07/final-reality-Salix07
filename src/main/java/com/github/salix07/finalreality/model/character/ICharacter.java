@@ -7,7 +7,7 @@ import com.github.salix07.finalreality.model.character.player.CharacterClass;
  * A character can be controlled by the player or by the CPU (an enemy).
  *
  * @author Ignacio Slater Muñoz.
- * @author <Sebastián Salinas Rodriguez>
+ * @author Sebastián Salinas Rodriguez
  */
 public interface ICharacter {
 
