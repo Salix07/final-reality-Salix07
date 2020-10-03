@@ -1,15 +1,18 @@
-package com.github.cc3002.finalreality.model.character;
+package com.github.salix07.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
+import com.github.salix07.finalreality.model.character.player.CharacterClass;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that holds all the information of a single enemy of the game.
  *
  * @author Ignacio Slater Muñoz
- * @author <Your name>
+ * @author Sebastián Salinas Rodriguez
  */
 public class Enemy extends AbstractCharacter {
 
@@ -21,9 +24,21 @@ public class Enemy extends AbstractCharacter {
    */
   public Enemy(@NotNull final String name, final int weight,
       @NotNull final BlockingQueue<ICharacter> turnsQueue) {
-    super(turnsQueue, name, CharacterClass.ENEMY);
+    super(name, turnsQueue, CharacterClass.ENEMY);
     this.weight = weight;
   }
+
+  /**
+   * Sets a scheduled executor to make this character (thread) wait for {@code speed / 10}
+   * seconds before adding the character to the queue.
+   */
+  @Override
+  public void waitTurn() {
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    var enemy = (Enemy) this;
+    scheduledExecutor
+              .schedule(this::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
+    }
 
   /**
    * Returns the weight of this enemy.

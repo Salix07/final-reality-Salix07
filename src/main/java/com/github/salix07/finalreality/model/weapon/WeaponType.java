@@ -1,10 +1,10 @@
-package com.github.cc3002.finalreality.model.weapon;
+package com.github.salix07.finalreality.model.weapon;
 
 /**
  * Enumeration of all the weapon types.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Sebastián Salinas Rodriguez
  */
 public enum WeaponType {
   SWORD, AXE, KNIFE, STAFF, BOW
