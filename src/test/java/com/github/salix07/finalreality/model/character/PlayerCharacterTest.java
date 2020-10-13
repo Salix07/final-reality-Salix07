@@ -1,3 +1,4 @@
+/*
 package com.github.salix07.finalreality.model.character;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.Test;
  * @author <Your name>
  * @see AbstractPlayerCharacter
  */
+
+/*
 class PlayerCharacterTest extends AbstractCharacterTest {
 
   private static final String BLACK_MAGE_NAME = "Vivi";
@@ -29,6 +32,8 @@ class PlayerCharacterTest extends AbstractCharacterTest {
    * Setup method.
    * Creates a new character named Vivi with 10 speed and links it to a turn queue.
    */
+
+/*
   @BeforeEach
   void setUp() {
     super.basicSetUp();
@@ -50,6 +55,8 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   /**
    * Checks that the class' constructor and equals method works properly.
    */
+
+/*
   @Test
   void constructorTest() {
     var enemy = new Enemy("Enemy", 10, turns);
@@ -78,3 +85,4 @@ class PlayerCharacterTest extends AbstractCharacterTest {
     }
   }
 }
+*/

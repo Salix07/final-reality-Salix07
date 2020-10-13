@@ -1,3 +1,4 @@
+/*
 package com.github.salix07.finalreality.model.character;
 
 import com.github.salix07.finalreality.model.character.player.Thief;
@@ -22,3 +23,4 @@ class EnemyTest extends AbstractCharacterTest {
         new Thief(ENEMY_NAME, 11, 11, turns));
   }
 }
+ */

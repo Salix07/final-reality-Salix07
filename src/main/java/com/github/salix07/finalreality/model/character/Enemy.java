@@ -123,6 +123,6 @@ public class Enemy implements ICharacter {
 
   @Override
   public int hashCode() {
-    return Objects.hash(getName(), getDefense(), getDamage(), getWeight());
+    return Objects.hash(Enemy.class, getName(), getDefense(), getDamage(), getWeight());
   }
 }
