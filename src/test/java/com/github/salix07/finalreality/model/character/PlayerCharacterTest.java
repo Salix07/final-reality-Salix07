@@ -1,12 +1,9 @@
-package com.github.cc3002.finalreality.model.character;
+package com.github.salix07.finalreality.model.character;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.github.salix07.finalreality.model.character.Enemy;
-import com.github.salix07.finalreality.model.character.player.CharacterClass;
-import com.github.salix07.finalreality.model.character.player.PlayerCharacter;
 import java.util.EnumMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +14,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Ignacio Slater Muñoz.
  * @author <Your name>
- * @see PlayerCharacter
+ * @see AbstractPlayerCharacter
  */
 class PlayerCharacterTest extends AbstractCharacterTest {
 
@@ -26,7 +23,7 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   private static final String WHITE_MAGE_NAME = "Eiko";
   private static final String ENGINEER_NAME = "Cid";
   private static final String THIEF_NAME = "Zidane";
-  private Map<CharacterClass, String> characterNames;
+  private Map<ICharacter, String> characterNames;
 
   /**
    * Setup method.
@@ -36,7 +33,7 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   void setUp() {
     super.basicSetUp();
 
-    characterNames = new EnumMap<>(CharacterClass.class);
+    characterNames = new EnumMap<>(ICharacter.class);
     characterNames.put(CharacterClass.BLACK_MAGE, BLACK_MAGE_NAME);
     characterNames.put(CharacterClass.KNIGHT, KNIGHT_NAME);
     characterNames.put(CharacterClass.WHITE_MAGE, WHITE_MAGE_NAME);
