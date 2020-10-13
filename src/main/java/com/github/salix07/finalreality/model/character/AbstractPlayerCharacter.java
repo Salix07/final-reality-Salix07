@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ignacio Slater Muñoz.
  * @author Sebastián Salinas Rodriguez.
  */
-public abstract class AbstractPlayerCharacter implements ICharacter {
+public abstract class AbstractPlayerCharacter implements ICharacter, IPlayerCharacterEquipped {
 
   protected final String name;
   protected int healthPoints;
@@ -25,7 +25,7 @@ public abstract class AbstractPlayerCharacter implements ICharacter {
   private ScheduledExecutorService scheduledExecutor;
 
   /**
-   * Creates a new player character.
+   * Constructor in common with all the player characters of the game.
    *
    * @param name
    *     the player character's name
@@ -60,7 +60,7 @@ public abstract class AbstractPlayerCharacter implements ICharacter {
   public int getHealthPoints() { return healthPoints; }
 
   /**
-   * Set this character's health points to the parameter passed.
+   * Set this character's health points to the passed parameter.
    */
   @Override
   public void setHealthPoints(int healthPoints) {
@@ -95,10 +95,12 @@ public abstract class AbstractPlayerCharacter implements ICharacter {
   /**
    * Equips a weapon to the character.
    */
+  @Override
   public void equip(IWeapon weapon) { equippedWeapon = weapon; }
 
   /**
    * Return this character's equipped weapon.
    */
+  @Override
   public IWeapon getEquippedWeapon() { return equippedWeapon; }
 }

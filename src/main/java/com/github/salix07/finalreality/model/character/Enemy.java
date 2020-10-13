@@ -26,7 +26,7 @@ public class Enemy implements ICharacter {
   private ScheduledExecutorService scheduledExecutor;
 
   /**
-   * Creates a new enemy with a name, a weight and the queue with the characters ready to play.
+   * Creates a new enemy with a name, health points, defense, damage, weight and the queue with the characters ready to play.
    *
    * @param name
    *     the enemy's name

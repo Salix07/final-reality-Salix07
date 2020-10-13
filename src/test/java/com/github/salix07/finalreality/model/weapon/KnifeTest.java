@@ -1,9 +1,6 @@
 package com.github.salix07.finalreality.model.weapon;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,11 +29,14 @@ public class KnifeTest {
         assertEquals(expectedKnife, testKnife);
         assertEquals(expectedKnife.hashCode(), testKnife.hashCode());
 
-        assertTrue(expectedKnife.equals(expectedKnife));
-        assertFalse(expectedKnife.equals(anotherKnife1));
-        assertFalse(expectedKnife.equals(anotherKnife2));
-        assertFalse(expectedKnife.equals(anotherKnife3));
-        assertFalse(expectedKnife.equals(expectedStaff));
+        assertEquals(testKnife, testKnife);
+        assertEquals(testKnife.hashCode(), testKnife.hashCode());
+
+        assertTrue(testKnife.equals(expectedKnife));
+        assertFalse(testKnife.equals(anotherKnife1));
+        assertFalse(testKnife.equals(anotherKnife2));
+        assertFalse(testKnife.equals(anotherKnife3));
+        assertFalse(testKnife.equals(expectedStaff));
     }
 
     @Test

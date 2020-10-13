@@ -1,9 +1,8 @@
 package com.github.salix07.finalreality.model.weapon;
 
 /**
- * A class that holds all the information of a weapon.
+ * An abstract class that holds the common behaviour of all the weapons in the game.
  *
- * @author Ignacio Slater Muñoz.
  * @author Sebastián Salinas Rodriguez
  */
 public abstract class AbstractWeapon implements IWeapon {
@@ -13,7 +12,13 @@ public abstract class AbstractWeapon implements IWeapon {
   protected final int weight;
 
   /**
-   * Creates a weapon with a name, a base damage, speed.
+   * Constructor in common with all weapons of the game.
+   * @param name
+   *     the weapon's name
+   * @param damage
+   *     the weapon's health points
+   * @param weight
+   *     the weapon's defense
    */
   public AbstractWeapon(final String name, final int damage, final int weight) {
     this.name = name;

@@ -2,7 +2,7 @@ package com.github.salix07.finalreality.model.weapon;
 
 import java.util.Objects;
 /**
- * A class that holds all the information of a knife.
+ * A class that holds all the information of a Knife.
  *
  * @author Sebastián Salinas Rodriguez.
  */

@@ -37,8 +37,15 @@ public class BlackMage extends AbstractPlayerCharacter {
         this.mana = mana;
     }
     // Black Mage specialization:
+
+    /**
+     * Returns this character's mana.
+     */
     public int getMana() { return mana;}
 
+    /**
+     * Set this character's mana to the parameter passed.
+     */
     public void setMana(int mana) {
         this.mana = mana;
     }

@@ -2,7 +2,7 @@ package com.github.salix07.finalreality.model.weapon;
 
 import java.util.Objects;
 /**
- * A class that holds all the information of a axe.
+ * A class that holds all the information of a Axe.
  *
  * @author Sebastián Salinas Rodriguez.
  */

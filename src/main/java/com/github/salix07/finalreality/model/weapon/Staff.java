@@ -2,7 +2,7 @@ package com.github.salix07.finalreality.model.weapon;
 
 import java.util.Objects;
 /**
- * A class that holds all the information of a staff.
+ * A class that holds all the information of a Staff.
  *
  * @author Sebastián Salinas Rodriguez.
  */
@@ -24,6 +24,7 @@ public class Staff extends AbstractWeapon {
         super(name, damage, weight);
         this.magicDamage = magicDamage;
     }
+
     // Staff specialization:
 
     /**

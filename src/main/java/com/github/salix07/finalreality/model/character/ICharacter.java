@@ -20,7 +20,7 @@ public interface ICharacter {
   int getHealthPoints();
 
   /**
-   * Set this character's health points to the parameter passed.
+   * Set this character's health points to the passed parameter.
    */
   void setHealthPoints(int healthPoints);
 
