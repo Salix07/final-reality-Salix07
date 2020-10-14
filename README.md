@@ -26,6 +26,7 @@ and interactions between them are implemented.
 It is also possible to perform a test on these classes to prove that what is implemented works.
 To run these tests we must download the repository, access the Test directory located in src
 and run the tests of all the classes that we want to test.
+
 ---
 
 Supuestos Realizados
@@ -49,6 +50,7 @@ Por último, los diagramas UML entregados en el resumen no contienen todas las r
 que contienen las clases, esto es debido a que los diagramas quedaban excesivamente grandes y al momento de colocarlos
 en el archivo pdf no se veían ni se entendían. Por lo cual se colocaron algunos diagramas UML de referencia en el resumen
 y los diagramas completos están subidos en este mismo repositorio en el directorio Diagrams/T1.
+
 ---
 
 Explicación del Funcionamiento y Lógica del Programa
@@ -81,4 +83,5 @@ heredan de esta clase abstracta.
 
 En el caso de los enemigos se creó un EnemyTest que prueba todos sus métodos. Y para las armas también se crearon test específicos para cada
 una (AxeTest, BowTest, KnifeTest, StaffTest, SwordTest).
+
 ---
