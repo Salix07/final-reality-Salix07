@@ -11,17 +11,12 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A class that holds all the information of a single enemy of the game.
  *
- * @author Ignacio Slater Muñoz
  * @author Sebastián Salinas Rodriguez.
  */
-public class Enemy implements ICharacter {
+public class Enemy extends AbstractCharacter {
 
-  protected final String name;
-  protected int healthPoints;
-  protected final int defense;
   protected final int damage;
   protected final int weight;
-  protected final BlockingQueue<ICharacter> turnsQueue;
 
   private ScheduledExecutorService scheduledExecutor;
 
@@ -43,41 +38,10 @@ public class Enemy implements ICharacter {
    */
   public Enemy(@NotNull final String name, int healthPoints, final int defense, final int damage,
                final int weight, @NotNull final BlockingQueue<ICharacter> turnsQueue) {
-    this.name = name;
-    this.healthPoints = healthPoints;
-    this.defense = defense;
+    super(name, healthPoints, defense, turnsQueue);
     this.damage = damage;
     this.weight = weight;
-    this.turnsQueue = turnsQueue;
   }
-
-  /**
-   * Returns this enemy's name.
-   */
-  @Override
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Returns this character's health points.
-   */
-  @Override
-  public int getHealthPoints() { return  healthPoints;}
-
-  /**
-   * Set this character's health points to the parameter passed.
-   */
-  @Override
-  public void setHealthPoints(int healthPoints) {
-    this.healthPoints = healthPoints;
-  }
-
-  /**
-   * Returns this character's defense.
-   */
-  @Override
-  public int getDefense() { return defense;}
 
   /**
    * Returns the damage of this enemy.
@@ -88,6 +52,19 @@ public class Enemy implements ICharacter {
    * Returns the weight of this enemy.
    */
   public int getWeight() { return weight; }
+
+  /**
+   * Returns this enemy's attack damage.
+   */
+  @Override
+  public int getAttackDamage() {
+    if (!this.isAlive()) {
+      return 0;
+    }
+    else {
+      return this.getDamage();
+    }
+  }
 
   /**
    * Adds this character to the turns queue.
@@ -105,8 +82,8 @@ public class Enemy implements ICharacter {
   public void waitTurn() {
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     scheduledExecutor
-              .schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
-    }
+            .schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+  }
 
   @Override
   public boolean equals(final Object o) {

@@ -26,7 +26,6 @@ class EnemyTest {
   protected List<Enemy> testEnemies;
 
   private static final String ENEMY_NAME = "Goblin";
-  private static int HEALTHPOINTS = 10;
   private static final int DEFENSE = 10;
   private static final int DAMAGE = 10;
   private static final int WEIGHT = 10;
@@ -56,13 +55,14 @@ class EnemyTest {
     assertEquals(expectedEnemy, testEqualEnemy);
     assertEquals(expectedEnemy.hashCode(), testEqualEnemy.hashCode());
 
-    assertTrue(testEqualEnemy.equals(expectedEnemy));
-    assertFalse(testEqualEnemy.equals(sameClassDifferentName));
-    assertTrue(testEqualEnemy.equals(sameClassDifferentHP));
-    assertFalse(testEqualEnemy.equals(sameClassDifferentDefense));
-    assertFalse(testEqualEnemy.equals(sameClassDifferentDamage));
-    assertFalse(testEqualEnemy.equals(sameClassDifferentWeight));
-    assertFalse(testEqualEnemy.equals(differentClassCharacter));
+    assertEquals(expectedEnemy, testEqualEnemy);
+    assertNotEquals(sameClassDifferentName, testEqualEnemy);
+    assertEquals(sameClassDifferentHP, testEqualEnemy);
+    assertNotEquals(sameClassDifferentDefense, testEqualEnemy);
+    assertNotEquals(sameClassDifferentDamage, testEqualEnemy);
+    assertNotEquals(sameClassDifferentWeight, testEqualEnemy);
+    assertNotEquals(differentClassCharacter, testEqualEnemy);
+    assertNotEquals(testEqualEnemy, differentClassCharacter);
   }
 
   /**
@@ -102,13 +102,13 @@ class EnemyTest {
    */
   @Test
   void constructorTest() {
-    var expectedEnemy = new Enemy(ENEMY_NAME, HEALTHPOINTS, DEFENSE, DAMAGE, WEIGHT, turns);
-    var anotherEnemy1 = new Enemy("Spider", HEALTHPOINTS, DEFENSE, DAMAGE, WEIGHT, turns);
+    var expectedEnemy = new Enemy(ENEMY_NAME, 10, DEFENSE, DAMAGE, WEIGHT, turns);
+    var anotherEnemy1 = new Enemy("Spider", 10, DEFENSE, DAMAGE, WEIGHT, turns);
     var anotherEnemy2 = new Enemy(ENEMY_NAME, 12, DEFENSE, DAMAGE, WEIGHT, turns);
-    var anotherEnemy3 = new Enemy(ENEMY_NAME, HEALTHPOINTS, 12, DAMAGE, WEIGHT, turns);
-    var anotherEnemy4 = new Enemy(ENEMY_NAME, HEALTHPOINTS, DEFENSE, 12, WEIGHT, turns);
-    var anotherEnemy5 = new Enemy(ENEMY_NAME, HEALTHPOINTS, DEFENSE, DAMAGE, 12, turns);
-    var expectedThief = new Thief(ENEMY_NAME, HEALTHPOINTS, DEFENSE, turns);
+    var anotherEnemy3 = new Enemy(ENEMY_NAME, 10, 12, DAMAGE, WEIGHT, turns);
+    var anotherEnemy4 = new Enemy(ENEMY_NAME, 10, DEFENSE, 12, WEIGHT, turns);
+    var anotherEnemy5 = new Enemy(ENEMY_NAME, 10, DEFENSE, DAMAGE, 12, turns);
+    var expectedThief = new Thief(ENEMY_NAME, 10, DEFENSE, turns);
 
     for (var enemy :
         testEnemies) {
@@ -123,7 +123,7 @@ class EnemyTest {
   void gettersTest() {
     assertEquals(ENEMY_NAME, testEnemy.getName());
     assertEquals(DEFENSE, testEnemy.getDefense());
-    assertEquals(HEALTHPOINTS, testEnemy.getHealthPoints());
+    assertEquals(10, testEnemy.getHealthPoints());
   }
 
   /**
@@ -133,5 +133,19 @@ class EnemyTest {
   void settersTest() {
     testEnemy.setHealthPoints(5);
     assertEquals(5, testEnemy.getHealthPoints());
+  }
+
+  /**
+   * Check that when the enemy is alive the enemy's damage is equals to enemy's attack
+   * and when the enemy is dead the enemy's damage is equals to 0
+   */
+  @Test
+  void getEnemyAttack() {
+    for (var enemy :
+            testEnemies) {
+      assertEquals(testEnemy.getDamage(), enemy.getAttackDamage());
+      enemy.isAlive = false;
+      assertEquals(0, enemy.getAttackDamage());
+    }
   }
 }

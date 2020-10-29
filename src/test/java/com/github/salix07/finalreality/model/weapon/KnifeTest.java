@@ -32,11 +32,11 @@ public class KnifeTest {
         assertEquals(testKnife, testKnife);
         assertEquals(testKnife.hashCode(), testKnife.hashCode());
 
-        assertTrue(testKnife.equals(expectedKnife));
-        assertFalse(testKnife.equals(anotherKnife1));
-        assertFalse(testKnife.equals(anotherKnife2));
-        assertFalse(testKnife.equals(anotherKnife3));
-        assertFalse(testKnife.equals(expectedStaff));
+        assertEquals(expectedKnife, testKnife);
+        assertNotEquals(anotherKnife1, testKnife);
+        assertNotEquals(anotherKnife2, testKnife);
+        assertNotEquals(anotherKnife3, testKnife);
+        assertNotEquals(expectedStaff, testKnife);
     }
 
     @Test

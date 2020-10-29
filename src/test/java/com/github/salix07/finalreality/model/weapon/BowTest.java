@@ -32,11 +32,11 @@ public class BowTest {
         assertEquals(testBow, testBow);
         assertEquals(testBow.hashCode(),testBow.hashCode());
 
-        assertTrue(testBow.equals(expectedBow));
-        assertFalse(testBow.equals(anotherBow1));
-        assertFalse(testBow.equals(anotherBow2));
-        assertFalse(testBow.equals(anotherBow3));
-        assertFalse(testBow.equals(expectedKnife));
+        assertEquals(expectedBow, testBow);
+        assertNotEquals(anotherBow1, testBow);
+        assertNotEquals(anotherBow2, testBow);
+        assertNotEquals(anotherBow3, testBow);
+        assertNotEquals(expectedKnife, testBow);
     }
 
     @Test

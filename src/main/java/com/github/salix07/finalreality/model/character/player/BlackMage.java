@@ -5,6 +5,8 @@ import com.github.salix07.finalreality.model.character.ICharacter;
 
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+
+import com.github.salix07.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -48,6 +50,14 @@ public class BlackMage extends AbstractPlayerCharacter {
      */
     public void setMana(int mana) {
         this.mana = mana;
+    }
+
+    /**
+     * Equips a weapon to the BlackMage using Double Dispatch.
+     */
+    @Override
+    public void equip(IWeapon weapon) {
+        weapon.equipToBlackMage(this);
     }
 
     @Override

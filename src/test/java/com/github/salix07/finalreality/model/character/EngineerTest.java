@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EngineerTest extends AbstractPlayerCharacterTest{
 
     private static final String ENGINEER_NAME = "Feto Ingeniero";
-    private static int HEALTHPOINTS = 300;
     private static final int DEFENSE = 100;
 
     private Engineer testEngineer;
@@ -27,7 +26,7 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
     @BeforeEach
     void setUp() {
         basicSetUp();
-        testEngineer = new Engineer(ENGINEER_NAME, HEALTHPOINTS, DEFENSE, turns);
+        testEngineer = new Engineer(ENGINEER_NAME, 300, DEFENSE, turns);
         testPlayerCharacters.add(testEngineer);
     }
 
@@ -36,11 +35,11 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
      */
     @Test
     void contructorTest() {
-        var expectedEngineer = new Engineer(ENGINEER_NAME, HEALTHPOINTS, DEFENSE, turns);
-        var anotherEngineer1 = new Engineer("Yop", HEALTHPOINTS, DEFENSE, turns);
+        var expectedEngineer = new Engineer(ENGINEER_NAME, 300, DEFENSE, turns);
+        var anotherEngineer1 = new Engineer("Yop", 300, DEFENSE, turns);
         var anotherEngineer2 = new Engineer(ENGINEER_NAME, 250, DEFENSE, turns);
-        var anotherEngineer3 = new Engineer(ENGINEER_NAME, HEALTHPOINTS, 50, turns);
-        var expectedKnight = new Knight(ENGINEER_NAME, HEALTHPOINTS, DEFENSE, turns);
+        var anotherEngineer3 = new Engineer(ENGINEER_NAME, 300, 50, turns);
+        var expectedKnight = new Knight(ENGINEER_NAME, 300, DEFENSE, turns);
 
         for (var character :
                 testPlayerCharacters) {
@@ -55,7 +54,7 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
     void gettersTest() {
         assertEquals(ENGINEER_NAME, testEngineer.getName());
         assertEquals(DEFENSE, testEngineer.getDefense());
-        assertEquals(HEALTHPOINTS, testEngineer.getHealthPoints());
+        assertEquals(300, testEngineer.getHealthPoints());
     }
 
     /**
@@ -65,5 +64,40 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
     void settersTest() {
         testEngineer.setHealthPoints(200);
         assertEquals(200, testEngineer.getHealthPoints());
+    }
+
+    /**
+     * Check that this Engineer starts without weapon and can equip an axe, and a bow
+     */
+    @Test
+    void equipWeaponTest() {
+        for (var character :
+                testPlayerCharacters) {
+            assertNull(character.getEquippedWeapon());
+            character.equip(testStaff);
+            assertNull(character.getEquippedWeapon());
+            character.equip(testAxe);
+            assertEquals(testAxe, character.getEquippedWeapon());
+            character.equip(testBow);
+            assertEquals(testBow, character.getEquippedWeapon());
+        }
+    }
+
+    /**
+     * Check that this Engineer's attack is 0 when no weapon is equipped
+     * and when a weapon is equipped the attack is the weapon damage
+     */
+    @Test
+    void getWeaponAttack() {
+        for (var character :
+                testPlayerCharacters) {
+            assertEquals(0, character.getAttackDamage());
+            character.equip(testStaff);
+            assertEquals(0, character.getAttackDamage());
+            character.equip(testAxe);
+            assertEquals(testAxe.getDamage(), character.getAttackDamage());
+            character.equip(testBow);
+            assertEquals(testBow.getDamage(), character.getAttackDamage());
+        }
     }
 }

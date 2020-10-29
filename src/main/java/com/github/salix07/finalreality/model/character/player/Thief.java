@@ -5,6 +5,8 @@ import com.github.salix07.finalreality.model.character.ICharacter;
 
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+
+import com.github.salix07.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +34,14 @@ public class Thief  extends AbstractPlayerCharacter {
         super(name, healthPoints, defense, turnsQueue);
     }
     // Thief specialization:
+
+    /**
+     * Equips a weapon to the Thief using Double Dispatch.
+     */
+    @Override
+    public void equip(IWeapon weapon) {
+        weapon.equipToThief(this);
+    }
 
     @Override
     public boolean equals(final Object o) {

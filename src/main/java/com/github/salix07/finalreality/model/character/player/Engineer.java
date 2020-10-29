@@ -5,6 +5,8 @@ import com.github.salix07.finalreality.model.character.ICharacter;
 
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+
+import com.github.salix07.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +34,14 @@ public class Engineer extends AbstractPlayerCharacter {
         super(name, healthPoints, defense, turnsQueue);
     }
     // Engineer specialization:
+
+    /**
+     * Equips a weapon to the Engineer using Double Dispatch.
+     */
+    @Override
+    public void equip(IWeapon weapon) {
+        weapon.equipToEngineer(this);
+    }
 
     @Override
     public boolean equals(final Object o) {

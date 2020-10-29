@@ -1,12 +1,13 @@
 package com.github.salix07.finalreality.model.character;
 
-import com.github.salix07.finalreality.model.weapon.Axe;
-import com.github.salix07.finalreality.model.weapon.IWeapon;
+import com.github.salix07.finalreality.model.character.player.*;
+import com.github.salix07.finalreality.model.weapon.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +16,20 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Abstract class containing the common tests for all the types of player characters.
  *
- * @author Ignacio Slater Muñoz.
  * @author Sebastián Salinas Rodriguez.
- * @see IPlayerCharacterEquipped
+ * @see IPlayerCharacter
  */
 
 public abstract class AbstractPlayerCharacterTest {
 
   protected BlockingQueue<ICharacter> turns;
-  protected List<IPlayerCharacterEquipped> testPlayerCharacters;
-  protected IWeapon testWeapon;
+  protected List<IPlayerCharacter> testPlayerCharacters;
+  protected Axe testAxe;
+  protected Bow testBow;
+  protected Knife testKnife;
+  protected Staff testStaff;
+  protected Sword testSword;
+
 
 
   /**
@@ -33,34 +38,49 @@ public abstract class AbstractPlayerCharacterTest {
   protected void basicSetUp() {
     turns = new LinkedBlockingQueue<>();
     testPlayerCharacters = new ArrayList<>();
-    testWeapon = new Axe("Test", 15, 10);
+    testAxe = new Axe("TestAxe",12,10);
+    testBow = new Bow("TestBow", 12, 10);
+    testKnife = new Knife("TestKnife",10,10);
+    testStaff = new Staff("testStaff", 5, 10, 10);
+    testSword = new Sword("TestSword", 15, 10);
   }
 
   /**
    * Function that is responsible for checking the correct construction and equalities between player characters
    */
-  protected void checkConstruction(final IPlayerCharacterEquipped expectedCharacter,
-      final IPlayerCharacterEquipped testEqualCharacter,
-      final IPlayerCharacterEquipped sameClassDifferentName,
-      final IPlayerCharacterEquipped sameClassDifferentHP,
-      final IPlayerCharacterEquipped sameClassDifferentDefense,
-      final IPlayerCharacterEquipped differentClassCharacter) {
+  protected void checkConstruction(final IPlayerCharacter expectedCharacter,
+      final IPlayerCharacter testEqualCharacter,
+      final IPlayerCharacter sameClassDifferentName,
+      final IPlayerCharacter sameClassDifferentHP,
+      final IPlayerCharacter sameClassDifferentDefense,
+      final IPlayerCharacter differentClassCharacter) {
 
     assertEquals(expectedCharacter, testEqualCharacter);
     assertEquals(expectedCharacter.hashCode(), testEqualCharacter.hashCode());
 
-    assertTrue(testEqualCharacter.equals(expectedCharacter));
-    assertFalse(testEqualCharacter.equals(sameClassDifferentName));
-    assertTrue(testEqualCharacter.equals(sameClassDifferentHP));
-    assertFalse(testEqualCharacter.equals(sameClassDifferentDefense));
-    assertFalse(testEqualCharacter.equals(differentClassCharacter));
+    assertEquals(testEqualCharacter, testEqualCharacter);
+    assertEquals(expectedCharacter, testEqualCharacter);
+    assertNotEquals(sameClassDifferentName, testEqualCharacter);
+    assertEquals(sameClassDifferentHP, testEqualCharacter);
+    assertNotEquals(sameClassDifferentDefense, testEqualCharacter);
+    assertNotEquals(differentClassCharacter, testEqualCharacter);
   }
 
   /**
-   * Function that calls the "equip" method of the player characters
+   * Function that calls the "equip" method of the player's characters depending on which character instance it is.
+   * We do this to equip the appropriate weapon an do the wait turn test.
    */
-  private void tryToEquip(IPlayerCharacterEquipped character) {
-    character.equip(testWeapon);
+  private void tryToEquip(IPlayerCharacter character) {
+
+    if (character instanceof Engineer || character instanceof Thief) {
+      character.equip(testBow);
+    }
+    if (character instanceof BlackMage || character instanceof WhiteMage) {
+      character.equip(testStaff);
+    }
+    if (character instanceof Knight) {
+      character.equip(testSword);
+    }
   }
 
   /**
@@ -71,7 +91,7 @@ public abstract class AbstractPlayerCharacterTest {
 
     Assertions.assertTrue(turns.isEmpty());
     tryToEquip(testPlayerCharacters.get(0));
-    ((ICharacter)testPlayerCharacters.get(0)).waitTurn();
+    testPlayerCharacters.get(0).waitTurn();
     try {
       // Thread.sleep is not accurate so this values may be changed to adjust the
       // acceptable error margin.
@@ -83,19 +103,6 @@ public abstract class AbstractPlayerCharacterTest {
       Assertions.assertEquals(testPlayerCharacters.get(0), turns.peek());
     } catch (InterruptedException e) {
       e.printStackTrace();
-    }
-  }
-
-  /**
-   * Check that the player character starts without weapon and can equip weapons
-   */
-  @Test
-  void equipWeaponTest() {
-    for (var character :
-            testPlayerCharacters) {
-      assertNull(character.getEquippedWeapon());
-      character.equip(testWeapon);
-      assertEquals(testWeapon, character.getEquippedWeapon());
     }
   }
 }

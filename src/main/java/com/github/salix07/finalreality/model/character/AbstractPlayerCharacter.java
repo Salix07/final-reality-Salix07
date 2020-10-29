@@ -11,15 +11,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * An abstract class that holds the common behaviour of all the player characters in the game.
  *
- * @author Ignacio Slater Muñoz.
  * @author Sebastián Salinas Rodriguez.
  */
-public abstract class AbstractPlayerCharacter implements ICharacter, IPlayerCharacterEquipped {
+public abstract class AbstractPlayerCharacter extends AbstractCharacter implements IPlayerCharacter {
 
-  protected final String name;
-  protected int healthPoints;
-  protected final int defense;
-  protected final BlockingQueue<ICharacter> turnsQueue;
   protected IWeapon equippedWeapon;
 
   private ScheduledExecutorService scheduledExecutor;
@@ -38,40 +33,36 @@ public abstract class AbstractPlayerCharacter implements ICharacter, IPlayerChar
    */
   protected AbstractPlayerCharacter(@NotNull String name, int healthPoints, int defense,
                                     @NotNull BlockingQueue<ICharacter> turnsQueue) {
-    this.name = name;
-    this.healthPoints = healthPoints;
-    this.defense = defense;
-    this.turnsQueue = turnsQueue;
+    super(name, healthPoints, defense, turnsQueue);
     this.equippedWeapon = null;
   }
 
   /**
-   * Returns this character's name.
+   * Return this character's equipped weapon.
    */
   @Override
-  public String getName() {
-    return name;
+  public IWeapon getEquippedWeapon() { return equippedWeapon; }
+
+  /**
+   * Set this player character's weapon to the passed parameter.
+   */
+  @Override
+  public void setEquippedWeapon(IWeapon weapon) {
+    this.equippedWeapon = weapon;
   }
 
   /**
-   * Returns this character's health points.
+   * Returns this player character's attack damage.
    */
   @Override
-  public int getHealthPoints() { return healthPoints; }
-
-  /**
-   * Set this character's health points to the passed parameter.
-   */
-  @Override
-  public void setHealthPoints(int healthPoints) {
-    this.healthPoints = healthPoints;
+  public int getAttackDamage() {
+    if (this.equippedWeapon == null) {
+      return 0;
+    }
+    else {
+      return equippedWeapon.getDamage();
+    }
   }
-
-  /**
-   * Returns this character's defense.
-   */
-  @Override
-  public int getDefense() { return defense; }
 
   /**
    * Adds this character to the turns queue.
@@ -91,16 +82,4 @@ public abstract class AbstractPlayerCharacter implements ICharacter, IPlayerChar
     scheduledExecutor
             .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
   }
-
-  /**
-   * Equips a weapon to the character.
-   */
-  @Override
-  public void equip(IWeapon weapon) { equippedWeapon = weapon; }
-
-  /**
-   * Return this character's equipped weapon.
-   */
-  @Override
-  public IWeapon getEquippedWeapon() { return equippedWeapon; }
 }

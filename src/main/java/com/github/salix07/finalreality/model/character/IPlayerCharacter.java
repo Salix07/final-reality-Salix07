@@ -9,15 +9,20 @@ import com.github.salix07.finalreality.model.weapon.IWeapon;
  * @author Sebastián Salinas Rodriguez.
  */
 
-public interface IPlayerCharacterEquipped {
+public interface IPlayerCharacter extends ICharacter {
 
     /**
-     * Equips a weapon to the character.
+     * Equips a weapon to the player character using Double Dispatch.
      */
     void equip(IWeapon weapon);
 
     /**
-     * Return this character's equipped weapon.
+     * Return this player character's equipped weapon.
      */
     IWeapon getEquippedWeapon();
+
+    /**
+     * Set this player character's weapon to the passed parameter.
+     */
+    void setEquippedWeapon(IWeapon weapon);
 }
