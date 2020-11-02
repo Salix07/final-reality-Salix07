@@ -1,5 +1,8 @@
 package com.github.salix07.finalreality.model.weapon;
 
+import com.github.salix07.finalreality.model.character.player.BlackMage;
+import com.github.salix07.finalreality.model.character.player.WhiteMage;
+
 import java.util.Objects;
 /**
  * A class that holds all the information of a Staff.
@@ -26,6 +29,22 @@ public class Staff extends AbstractWeapon {
     }
 
     // Staff specialization:
+
+    /**
+     * The staff will be equipped on a black mage.
+     */
+    @Override
+    public void equipToBlackMage(BlackMage blackMage) {
+        blackMage.setEquippedWeapon(this);
+    }
+
+    /**
+     * The staff will be equipped on a white mage.
+     */
+    @Override
+    public void equipToWhiteMage(WhiteMage whiteMage) {
+        whiteMage.setEquippedWeapon(this);
+    }
 
     /**
      * Returns this staff's magic damage.

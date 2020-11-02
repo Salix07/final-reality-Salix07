@@ -1,5 +1,8 @@
 package com.github.salix07.finalreality.model.weapon;
 
+import com.github.salix07.finalreality.model.character.player.Engineer;
+import com.github.salix07.finalreality.model.character.player.Knight;
+
 import java.util.Objects;
 /**
  * A class that holds all the information of a Axe.
@@ -22,6 +25,22 @@ public class Axe extends AbstractWeapon {
     }
 
     // Axe specialization:
+
+    /**
+     * The axe will be equipped on a Engineer.
+     */
+    @Override
+    public void equipToEngineer(Engineer engineer) {
+        engineer.setEquippedWeapon(this);
+    }
+
+    /**
+     * The axe will be equipped on a Knight.
+     */
+    @Override
+    public void equipToKnight(Knight knight) {
+        knight.setEquippedWeapon(this);
+    }
 
     @Override
     public boolean equals(final Object o) {

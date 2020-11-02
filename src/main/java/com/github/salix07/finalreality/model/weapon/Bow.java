@@ -1,5 +1,8 @@
 package com.github.salix07.finalreality.model.weapon;
 
+import com.github.salix07.finalreality.model.character.player.Engineer;
+import com.github.salix07.finalreality.model.character.player.Thief;
+
 import java.util.Objects;
 /**
  * A class that holds all the information of a Bow.
@@ -22,6 +25,22 @@ public class Bow extends AbstractWeapon {
     }
 
     // Bow specialization:
+
+    /**
+     * The bow will be equipped on a Engineer.
+     */
+    @Override
+    public void equipToEngineer(Engineer engineer) {
+        engineer.setEquippedWeapon(this);
+    }
+
+    /**
+     * The bow will be equipped on a Thief.
+     */
+    @Override
+    public void equipToThief(Thief thief) {
+        thief.setEquippedWeapon(this);
+    }
 
     @Override
     public boolean equals(final Object o) {

@@ -32,11 +32,11 @@ public class SwordTest {
         assertEquals(testSword, testSword);
         assertEquals(testSword.hashCode(), testSword.hashCode());
 
-        assertTrue(testSword.equals(expectedSword));
-        assertFalse(testSword.equals(anotherSword1));
-        assertFalse(testSword.equals(anotherSword2));
-        assertFalse(testSword.equals(anotherSword3));
-        assertFalse(testSword.equals(expectedAxe));
+        assertEquals(expectedSword, testSword);
+        assertNotEquals(anotherSword1, testSword);
+        assertNotEquals(anotherSword2, testSword);
+        assertNotEquals(anotherSword3, testSword);
+        assertNotEquals(expectedAxe, testSword);
     }
 
     @Test

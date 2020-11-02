@@ -1,5 +1,8 @@
 package com.github.salix07.finalreality.model.weapon;
 
+import com.github.salix07.finalreality.model.character.player.Knight;
+import com.github.salix07.finalreality.model.character.player.Thief;
+
 import java.util.Objects;
 /**
  * A class that holds all the information of a Sword.
@@ -22,6 +25,22 @@ public class Sword extends AbstractWeapon {
     }
 
     // Sword specialization:
+
+    /**
+     * The sword will be equipped on a knight.
+     */
+    @Override
+    public void equipToKnight(Knight knight) {
+        knight.setEquippedWeapon(this);
+    }
+
+    /**
+     * The sword will be equipped on a thief.
+     */
+    @Override
+    public void equipToThief(Thief thief) {
+        thief.setEquippedWeapon(this);
+    }
 
     @Override
     public boolean equals(final Object o) {

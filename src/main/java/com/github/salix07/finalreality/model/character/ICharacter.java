@@ -4,7 +4,6 @@ package com.github.salix07.finalreality.model.character;
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
  *
- * @author Ignacio Slater Muñoz.
  * @author Sebastián Salinas Rodriguez.
  */
 public interface ICharacter {
@@ -28,6 +27,27 @@ public interface ICharacter {
    * Returns this character's defense.
    */
   int getDefense();
+
+  /**
+   * Returns a boolean value depending on the character condition
+   * (true if the character is alive and false if the character is dead.)
+   */
+  boolean isAlive();
+
+  /**
+   * Returns this character's attack damage.
+   */
+  int getAttackDamage();
+
+  /**
+   * The character performs an attack
+   */
+  void attack(ICharacter character);
+
+  /**
+   * The character get damaged
+   */
+  void attackedBy(int damage);
 
   /**
    * Sets a scheduled executor to make this character (thread) wait for {@code speed / 10}

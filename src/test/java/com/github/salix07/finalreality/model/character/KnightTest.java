@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class KnightTest extends AbstractPlayerCharacterTest{
 
-    private static final String KNIGHT_NAME = "Garen";
-    private static int HEALTHPOINTS = 300;
+    private static final String KNIGHT_NAME = "Jarvan";
     private static final int DEFENSE = 100;
 
     private Knight testKnight;
@@ -27,7 +26,7 @@ public class KnightTest extends AbstractPlayerCharacterTest{
     @BeforeEach
     void setUp() {
         basicSetUp();
-        testKnight = new Knight(KNIGHT_NAME, HEALTHPOINTS, DEFENSE, turns);
+        testKnight = new Knight(KNIGHT_NAME, 300, DEFENSE, turns);
         testPlayerCharacters.add(testKnight);
     }
 
@@ -36,11 +35,11 @@ public class KnightTest extends AbstractPlayerCharacterTest{
      */
     @Test
     void contructorTest() {
-        var expectedKnight = new Knight(KNIGHT_NAME, HEALTHPOINTS, DEFENSE, turns);
-        var anotherKnight1 = new Knight("Darius", HEALTHPOINTS, DEFENSE, turns);
+        var expectedKnight = new Knight(KNIGHT_NAME, 300, DEFENSE, turns);
+        var anotherKnight1 = new Knight("Darius", 300, DEFENSE, turns);
         var anotherKnight2 = new Knight(KNIGHT_NAME, 250, DEFENSE, turns);
-        var anotherKnight3 = new Knight(KNIGHT_NAME, HEALTHPOINTS, 50, turns);
-        var expectedThief = new Thief(KNIGHT_NAME, HEALTHPOINTS, DEFENSE, turns);
+        var anotherKnight3 = new Knight(KNIGHT_NAME, 300, 50, turns);
+        var expectedThief = new Thief(KNIGHT_NAME, 300, DEFENSE, turns);
 
         for (var character :
                 testPlayerCharacters) {
@@ -55,7 +54,7 @@ public class KnightTest extends AbstractPlayerCharacterTest{
     void gettersTest() {
         assertEquals(KNIGHT_NAME, testKnight.getName());
         assertEquals(DEFENSE, testKnight.getDefense());
-        assertEquals(HEALTHPOINTS, testKnight.getHealthPoints());
+        assertEquals(300, testKnight.getHealthPoints());
     }
 
     /**
@@ -65,5 +64,44 @@ public class KnightTest extends AbstractPlayerCharacterTest{
     void settersTest() {
         testKnight.setHealthPoints(200);
         assertEquals(200, testKnight.getHealthPoints());
+    }
+
+    /**
+     * Check that this Knight starts without weapon and can equip an axe, a knife and a sword
+     */
+    @Test
+    void equipWeaponTest() {
+        for (var character :
+                testPlayerCharacters) {
+            assertNull(character.getEquippedWeapon());
+            character.equip(testStaff);
+            assertNull(character.getEquippedWeapon());
+            character.equip(testAxe);
+            assertEquals(testAxe, character.getEquippedWeapon());
+            character.equip(testKnife);
+            assertEquals(testKnife, character.getEquippedWeapon());
+            character.equip(testSword);
+            assertEquals(testSword, character.getEquippedWeapon());
+        }
+    }
+
+    /**
+     * Check that this Knight's attack is 0 when no weapon is equipped
+     * and when a weapon is equipped the attack is the weapon damage
+     */
+    @Test
+    void getWeaponAttack() {
+        for (var character :
+                testPlayerCharacters) {
+            assertEquals(0, character.getAttackDamage());
+            character.equip(testStaff);
+            assertEquals(0, character.getAttackDamage());
+            character.equip(testAxe);
+            assertEquals(testAxe.getDamage(), character.getAttackDamage());
+            character.equip(testKnife);
+            assertEquals(testKnife.getDamage(), character.getAttackDamage());
+            character.equip(testSword);
+            assertEquals(testSword.getDamage(), character.getAttackDamage());
+        }
     }
 }

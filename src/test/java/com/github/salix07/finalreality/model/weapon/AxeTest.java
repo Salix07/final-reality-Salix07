@@ -32,11 +32,11 @@ public class AxeTest {
         assertEquals(testAxe, testAxe);
         assertEquals(testAxe.hashCode(),testAxe.hashCode());
 
-        assertTrue(testAxe.equals(expectedAxe));
-        assertFalse(testAxe.equals(anotherAxe1));
-        assertFalse(testAxe.equals(anotherAxe2));
-        assertFalse(testAxe.equals(anotherAxe3));
-        assertFalse(testAxe.equals(expectedBow));
+        assertEquals(expectedAxe, testAxe);
+        assertNotEquals(anotherAxe1, testAxe);
+        assertNotEquals(anotherAxe2, testAxe);
+        assertNotEquals(anotherAxe3, testAxe);
+        assertNotEquals(expectedBow, testAxe);
     }
 
     @Test

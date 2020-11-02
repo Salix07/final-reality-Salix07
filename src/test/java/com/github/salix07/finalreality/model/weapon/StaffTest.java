@@ -34,12 +34,12 @@ public class StaffTest {
         assertEquals(testStaff, testStaff);
         assertEquals(testStaff.hashCode(), testStaff.hashCode());
 
-        assertTrue(testStaff.equals(expectedStaff));
-        assertFalse(testStaff.equals(anotherStaff1));
-        assertFalse(testStaff.equals(anotherStaff2));
-        assertFalse(testStaff.equals(anotherStaff3));
-        assertFalse(testStaff.equals(anotherStaff4));
-        assertFalse(testStaff.equals(expectedSword));
+        assertEquals(expectedStaff, testStaff);
+        assertNotEquals(anotherStaff1, testStaff);
+        assertNotEquals(anotherStaff2, testStaff);
+        assertNotEquals(anotherStaff3, testStaff);
+        assertNotEquals(anotherStaff4, testStaff);
+        assertNotEquals(expectedSword, testStaff);
     }
 
     @Test
