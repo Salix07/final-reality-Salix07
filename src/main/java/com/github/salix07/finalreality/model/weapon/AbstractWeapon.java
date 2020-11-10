@@ -9,9 +9,9 @@ import com.github.salix07.finalreality.model.character.player.*;
  */
 public abstract class AbstractWeapon implements IWeapon {
 
-  protected final String name;
-  protected final int damage;
-  protected final int weight;
+  private final String name;
+  private final int damage;
+  private final int weight;
 
   /**
    * Constructor in common with all weapons of the game.
@@ -32,21 +32,21 @@ public abstract class AbstractWeapon implements IWeapon {
    * Returns this weapon's name.
    */
   public String getName() {
-    return name;
+    return this.name;
   }
 
   /**
    * Returns this weapon's damage.
    */
   public int getDamage() {
-    return damage;
+    return this.damage;
   }
 
   /**
    * Returns this weapon's weight.
    */
   public int getWeight() {
-    return weight;
+    return this.weight;
   }
 
   @Override

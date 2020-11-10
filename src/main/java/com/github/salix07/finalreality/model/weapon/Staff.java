@@ -49,7 +49,7 @@ public class Staff extends AbstractWeapon {
     /**
      * Returns this staff's magic damage.
      */
-    public int getMagicDamage() { return magicDamage; }
+    public int getMagicDamage() { return this.magicDamage; }
 
     @Override
     public boolean equals(final Object o) {

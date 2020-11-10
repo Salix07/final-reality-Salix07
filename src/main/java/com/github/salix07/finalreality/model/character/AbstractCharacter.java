@@ -1,6 +1,7 @@
 package com.github.salix07.finalreality.model.character;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,10 +11,11 @@ import org.jetbrains.annotations.NotNull;
  * @author Sebastián Salinas Rodriguez.
  */
 public abstract class AbstractCharacter implements ICharacter {
-  protected final String name;
-  protected int healthPoints;
-  protected final int defense;
+  private final String name;
+  private int healthPoints;
+  private final int defense;
   protected final BlockingQueue<ICharacter> turnsQueue;
+  protected ScheduledExecutorService scheduledExecutor;
   protected boolean isAlive;
 
   /**
@@ -36,16 +38,14 @@ public abstract class AbstractCharacter implements ICharacter {
    * Returns this character's name.
    */
   @Override
-  public String getName() {
-        return name;
-    }
+  public String getName() { return this.name; }
 
   /**
    * Returns this character's health points.
    */
   @Override
   public int getHealthPoints() {
-        return healthPoints;
+        return this.healthPoints;
     }
 
   /**
@@ -61,7 +61,7 @@ public abstract class AbstractCharacter implements ICharacter {
    */
   @Override
   public int getDefense() {
-        return defense;
+        return this.defense;
     }
 
   /**
@@ -101,4 +101,12 @@ public abstract class AbstractCharacter implements ICharacter {
           this.isAlive = false;  // the character is dead
       }
   }
+
+    /**
+     * Adds this character to the turns queue.
+     */
+    protected void addToQueue() {
+        turnsQueue.add(this);
+        scheduledExecutor.shutdown();
+    }
 }
