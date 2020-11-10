@@ -2,7 +2,6 @@ package com.github.salix07.finalreality.model.character;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.github.salix07.finalreality.model.weapon.IWeapon;
@@ -15,9 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractPlayerCharacter extends AbstractCharacter implements IPlayerCharacter {
 
-  protected IWeapon equippedWeapon;
-
-  private ScheduledExecutorService scheduledExecutor;
+  private IWeapon equippedWeapon;
 
   /**
    * Constructor in common with all the player characters of the game.
@@ -41,7 +38,7 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
    * Return this character's equipped weapon.
    */
   @Override
-  public IWeapon getEquippedWeapon() { return equippedWeapon; }
+  public IWeapon getEquippedWeapon() { return this.equippedWeapon; }
 
   /**
    * Set this player character's weapon to the passed parameter.
@@ -60,16 +57,8 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
       return 0;
     }
     else {
-      return equippedWeapon.getDamage();
+      return this.equippedWeapon.getDamage();
     }
-  }
-
-  /**
-   * Adds this character to the turns queue.
-   */
-  private void addToQueue() {
-    turnsQueue.add(this);
-    scheduledExecutor.shutdown();
   }
 
   /**

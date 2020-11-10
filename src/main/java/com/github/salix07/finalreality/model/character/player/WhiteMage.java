@@ -43,7 +43,7 @@ public class WhiteMage extends AbstractPlayerCharacter {
     /**
      * Returns this character's mana.
      */
-    public int getMana() { return mana;}
+    public int getMana() { return this.mana;}
 
     /**
      * Set this character's mana to the parameter passed.

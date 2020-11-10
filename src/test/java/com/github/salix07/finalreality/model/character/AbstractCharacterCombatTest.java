@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-public class AbstractCharacterTest {
+public class AbstractCharacterCombatTest {
 
     protected BlockingQueue<ICharacter> turns;
 

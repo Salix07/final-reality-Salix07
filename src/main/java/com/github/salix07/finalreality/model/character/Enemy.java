@@ -3,7 +3,6 @@ package com.github.salix07.finalreality.model.character;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,10 +14,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Enemy extends AbstractCharacter {
 
-  protected final int damage;
-  protected final int weight;
-
-  private ScheduledExecutorService scheduledExecutor;
+  private final int damage;
+  private final int weight;
 
   /**
    * Creates a new enemy with a name, health points, defense, damage, weight and the queue with the characters ready to play.
@@ -46,12 +43,12 @@ public class Enemy extends AbstractCharacter {
   /**
    * Returns the damage of this enemy.
    */
-  public int getDamage() { return  damage; }
+  public int getDamage() { return  this.damage; }
 
   /**
    * Returns the weight of this enemy.
    */
-  public int getWeight() { return weight; }
+  public int getWeight() { return this.weight; }
 
   /**
    * Returns this enemy's attack damage.
@@ -64,14 +61,6 @@ public class Enemy extends AbstractCharacter {
     else {
       return this.getDamage();
     }
-  }
-
-  /**
-   * Adds this character to the turns queue.
-   */
-  private void addToQueue() {
-    turnsQueue.add(this);
-    scheduledExecutor.shutdown();
   }
 
   /**

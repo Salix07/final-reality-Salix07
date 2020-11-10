@@ -29,8 +29,8 @@ public interface ICharacter {
   int getDefense();
 
   /**
-   * Returns a boolean value depending on the character condition
-   * (true if the character is alive and false if the character is dead.)
+   * Returns a boolean value depending on the character condition.
+   * (True if the character is alive and false if the character is dead.)
    */
   boolean isAlive();
 
