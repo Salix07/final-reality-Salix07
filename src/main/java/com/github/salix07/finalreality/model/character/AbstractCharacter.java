@@ -1,8 +1,11 @@
 package com.github.salix07.finalreality.model.character;
 
+import java.beans.PropertyChangeSupport;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
+import com.github.salix07.finalreality.controller.EnemyDeathHandler;
+import com.github.salix07.finalreality.controller.PlayerCharacterDeathHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,6 +14,11 @@ import org.jetbrains.annotations.NotNull;
  * @author Sebastián Salinas Rodriguez.
  */
 public abstract class AbstractCharacter implements ICharacter {
+  private final PropertyChangeSupport characterDeathEvent;
+  // El equivalente a Observable.
+  // Pero en este caso es una propiedad o evento que puede cambiar en ICharacter.
+  // A este evento le podemos agregar suscriptores (listeners) a los que se les informa cuando cambió
+
   private final String name;
   private int healthPoints;
   private final int defense;
@@ -27,6 +35,7 @@ public abstract class AbstractCharacter implements ICharacter {
    * @param turnsQueue   the queue with all the characters waiting for their turn
    */
   protected AbstractCharacter(@NotNull String name, int healthPoints, int defense, @NotNull BlockingQueue<ICharacter> turnsQueue) {
+      characterDeathEvent = new PropertyChangeSupport(this); // Asociar evento de muerte a este personaje
       this.name = name;
       this.healthPoints = healthPoints;
       this.defense = defense;
@@ -99,6 +108,7 @@ public abstract class AbstractCharacter implements ICharacter {
 
       if(this.getHealthPoints() <= 0) { // If the new health points are less than or equal to 0
           this.isAlive = false;  // the character is dead
+          characterDeathEvent.firePropertyChange("Character´s Death", null, this); // Notificar el cambio
       }
   }
 
@@ -108,5 +118,21 @@ public abstract class AbstractCharacter implements ICharacter {
     protected void addToQueue() {
         turnsQueue.add(this);
         scheduledExecutor.shutdown();
+    }
+
+    /**
+     * Adds a subscriber to a PlayerCharacter's death event
+     * (the subscriber is the PlayerCharacterDeathHandler)
+     */
+    public void addSubscriberForPlayerCharacter(PlayerCharacterDeathHandler playerCharacterDeathHandler) {
+        characterDeathEvent.addPropertyChangeListener(playerCharacterDeathHandler);
+    }
+
+    /**
+     * Adds a subscriber to a Enemy's death event
+     * (the subscriber is the EnemyDeathHandler)
+     */
+    public void addSubscriberForEnemy(EnemyDeathHandler EnemyDeathHandler) {
+        characterDeathEvent.addPropertyChangeListener(EnemyDeathHandler);
     }
 }

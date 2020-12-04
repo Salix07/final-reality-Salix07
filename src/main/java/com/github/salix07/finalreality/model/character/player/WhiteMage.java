@@ -1,6 +1,6 @@
 package com.github.salix07.finalreality.model.character.player;
 
-import com.github.salix07.finalreality.model.character.AbstractPlayerCharacter;
+import com.github.salix07.finalreality.model.character.AbstractMage;
 import com.github.salix07.finalreality.model.character.ICharacter;
 
 import java.util.Objects;
@@ -15,9 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Sebastián Salinas Rodriguez.
  */
 
-public class WhiteMage extends AbstractPlayerCharacter {
-
-    private int mana;
+public class WhiteMage extends AbstractMage {
 
     /**
      * Creates a new White Mage.
@@ -35,22 +33,9 @@ public class WhiteMage extends AbstractPlayerCharacter {
      */
     public WhiteMage(@NotNull String name, int healthPoints, final int defense, int mana,
                      @NotNull BlockingQueue<ICharacter> turnsQueue) {
-        super(name, healthPoints, defense, turnsQueue);
-        this.mana = mana;
+        super(name, healthPoints, defense, mana, turnsQueue);
     }
     // White Mage specialization:
-
-    /**
-     * Returns this character's mana.
-     */
-    public int getMana() { return this.mana;}
-
-    /**
-     * Set this character's mana to the parameter passed.
-     */
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
 
     /**
      * Equips a weapon to the WhiteMage using Double Dispatch.
