@@ -83,6 +83,12 @@ public class ThiefTest extends AbstractPlayerCharacterTest{
             character.equip(testSword);
             assertEquals(testSword, character.getEquippedWeapon());
         }
+        // If the thief is dead, we can´t equip a weapon
+        Enemy bigBoss = new Enemy("Big Boss", 500,DEFENSE,400,10, turns);
+        Thief deadThief = new Thief(THIEF_NAME, 300, DEFENSE, turns);
+        bigBoss.attack(deadThief);
+        deadThief.equip(testKnife);
+        assertNull(deadThief.getEquippedWeapon());
     }
 
     /**

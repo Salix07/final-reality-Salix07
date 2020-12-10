@@ -81,6 +81,12 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
             character.equip(testBow);
             assertEquals(testBow, character.getEquippedWeapon());
         }
+        // If the engineer is dead, we can´t equip a weapon
+        Enemy bigBoss = new Enemy("Big Boss", 500,DEFENSE,400,10, turns);
+        Engineer deadEngineer = new Engineer(ENGINEER_NAME, 300, DEFENSE, turns);
+        bigBoss.attack(deadEngineer);
+        deadEngineer.equip(testAxe);
+        assertNull(deadEngineer.getEquippedWeapon());
     }
 
     /**

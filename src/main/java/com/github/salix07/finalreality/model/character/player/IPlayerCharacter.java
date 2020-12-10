@@ -1,5 +1,6 @@
-package com.github.salix07.finalreality.model.character;
+package com.github.salix07.finalreality.model.character.player;
 
+import com.github.salix07.finalreality.model.character.ICharacter;
 import com.github.salix07.finalreality.model.weapon.IWeapon;
 
 /**

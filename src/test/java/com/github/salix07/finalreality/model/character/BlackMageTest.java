@@ -87,6 +87,12 @@ public class BlackMageTest extends AbstractPlayerCharacterTest{
             character.equip(testStaff);
             assertEquals(testStaff, character.getEquippedWeapon());
         }
+        // If the blackMage is dead, we can´t equip a weapon
+        Enemy bigBoss = new Enemy("Big Boss", 500,DEFENSE,400,10, turns);
+        BlackMage deadBlackMage = new BlackMage(BLACKMAGE_NAME, 300, DEFENSE, 150, turns);
+        bigBoss.attack(deadBlackMage);
+        deadBlackMage.equip(testStaff);
+        assertNull(deadBlackMage.getEquippedWeapon());
     }
 
     /**

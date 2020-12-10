@@ -83,6 +83,12 @@ public class KnightTest extends AbstractPlayerCharacterTest{
             character.equip(testSword);
             assertEquals(testSword, character.getEquippedWeapon());
         }
+        // If the knight is dead, we can´t equip a weapon
+        Enemy bigBoss = new Enemy("Big Boss", 500,DEFENSE,400,10, turns);
+        Knight deadKnight = new Knight(KNIGHT_NAME, 300, DEFENSE, turns);
+        bigBoss.attack(deadKnight);
+        deadKnight.equip(testSword);
+        assertNull(deadKnight.getEquippedWeapon());
     }
 
     /**
