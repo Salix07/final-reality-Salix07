@@ -1,4 +1,4 @@
-package com.github.salix07.finalreality.model.character;
+package com.github.salix07.finalreality.model.character.player;
 
 /**
  * This represents a mage from the game.

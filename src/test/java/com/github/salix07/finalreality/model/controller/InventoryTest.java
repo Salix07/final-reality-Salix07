@@ -2,8 +2,7 @@ package com.github.salix07.finalreality.model.controller;
 
 
 import com.github.salix07.finalreality.controller.GameController;
-import com.github.salix07.finalreality.model.character.Enemy;
-import com.github.salix07.finalreality.model.character.IPlayerCharacter;
+import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 import com.github.salix07.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

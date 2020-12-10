@@ -1,9 +1,9 @@
-package com.github.salix07.finalreality.controller;
+package com.github.salix07.finalreality.controller.eventHandler;
 
+import com.github.salix07.finalreality.controller.GameController;
 import com.github.salix07.finalreality.model.character.Enemy;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * Enemy´s death handler.
@@ -11,7 +11,7 @@ import java.beans.PropertyChangeListener;
  *
  * @author Sebastián Salinas
  */
-public class EnemyDeathHandler implements IDeathHandler { // Implementa la interfaz de Handlers de muertes
+public class EnemyDeathHandler implements IHandler { // Implementa la interfaz de Handlers
     private final GameController controller;
 
     /**

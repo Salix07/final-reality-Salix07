@@ -2,8 +2,7 @@ package com.github.salix07.finalreality.model.controller;
 
 import com.github.salix07.finalreality.controller.GameController;
 import com.github.salix07.finalreality.model.character.Enemy;
-import com.github.salix07.finalreality.model.character.IPlayerCharacter;
-import com.github.salix07.finalreality.model.weapon.IWeapon;
+import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Class containing the common tests for controller´s partys
+ * Class containing the common tests for controller´s teams
  *
  * @author Sebastián Salinas Rodriguez.
  *

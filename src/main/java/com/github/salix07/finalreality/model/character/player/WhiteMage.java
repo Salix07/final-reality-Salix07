@@ -1,6 +1,5 @@
 package com.github.salix07.finalreality.model.character.player;
 
-import com.github.salix07.finalreality.model.character.AbstractMage;
 import com.github.salix07.finalreality.model.character.ICharacter;
 
 import java.util.Objects;

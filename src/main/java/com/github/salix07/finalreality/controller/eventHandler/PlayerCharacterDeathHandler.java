@@ -1,6 +1,7 @@
-package com.github.salix07.finalreality.controller;
+package com.github.salix07.finalreality.controller.eventHandler;
 
-import com.github.salix07.finalreality.model.character.IPlayerCharacter;
+import com.github.salix07.finalreality.controller.GameController;
+import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 
 import java.beans.PropertyChangeEvent;
 
@@ -10,7 +11,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author Sebastián Salinas
  */
-public class PlayerCharacterDeathHandler implements IDeathHandler { // Implementa la interfaz de Handlers de muertes
+public class PlayerCharacterDeathHandler implements IHandler { // Implementa la interfaz de Handlers
     private final GameController controller;
 
     /**

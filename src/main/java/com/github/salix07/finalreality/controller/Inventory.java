@@ -6,15 +6,20 @@ import java.util.HashMap;
 
 /**
  * Player's inventory.
- * The inventory save the IPlayerCharacters weapons
+ * The inventory save the IPlayerCharacter's weapons
  *
  * @author Sebastián Salinas
  */
 public class Inventory {
     private HashMap<String, IWeapon> inventory;
+
+    /**
+     * Constructor of the class Inventory, here the inventory is initialized as a Hashmap
+     */
     public Inventory() {
         inventory = new HashMap<>(); // Inventory initialization as a hashmap
     }
+
     /**
      * Returns a boolean value depending if the inventory is empty or not
      */

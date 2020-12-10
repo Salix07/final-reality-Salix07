@@ -1,14 +1,14 @@
 package com.github.salix07.finalreality.controller;
 
+import com.github.salix07.finalreality.controller.eventHandler.*;
 import com.github.salix07.finalreality.model.character.Enemy;
 import com.github.salix07.finalreality.model.character.ICharacter;
-import com.github.salix07.finalreality.model.character.IMage;
-import com.github.salix07.finalreality.model.character.IPlayerCharacter;
+import com.github.salix07.finalreality.model.character.player.IMage;
+import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 import com.github.salix07.finalreality.model.character.player.*;
 import com.github.salix07.finalreality.model.weapon.*;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -21,18 +21,23 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @since 1.0
  */
 public class GameController {
+    /* Observer Pattern */
+    // Handlers for different events
     private final PlayerCharacterDeathHandler playerCharacterDeathHandler;
     private final EnemyDeathHandler enemyDeathHandler;
+    private final PlayerCharacterAddToQueueHandler playerCharacterAddToQueueHandler;
+    private final EnemyAddToQueueHandler enemyAddToQueueHandler;
 
     private BlockingQueue<ICharacter> turns; // Turns BlockingQueue
+    private BlockingQueue<Integer> typeOfTurn; // Queue with turns type (IPlayerCharacter´s turn == 1 Enemy´s turn == 0)
 
     private ArrayList<IPlayerCharacter> playerCharacters; // Player's party
     private ArrayList<Enemy> enemies; // Enemy's party
     private Inventory inventory; // Inventory from the game
 
-    private final int numberOfPlayerCharacters; // Cantidad fija de playerCharacters (tamaño de la party)
+    private final int numberOfPlayerCharacters; // Cantidad fija de playerCharacters (tamaño exacto de la party)
+    private final int maximumOfEnemies; // Cantidad máxima de enemigos (tamaño máximo de la party de enemigos)
     private int playerCharactersAlive; // Cantidad de playerCharacters que están vivos
-    private final int numberOfEnemies; // Cantidad fija de enemigos (tamaña de la party de enemigos)
     private int enemiesAlive; // Cantidad de enemigos que están vivos
 
     private ICharacter activeICharacter; // Active ICharacter from the turns BlockingQueue
@@ -42,25 +47,28 @@ public class GameController {
      *
      * @param numberOfPlayerCharacters
      *     the number of PlayerCharacters for this game
-     * @param numberOfEnemies
-     *     the number of Enemies for this game
+     * @param maximumOfEnemies
+     *     the maximum number of Enemies for this game
      */
-    public GameController(int numberOfPlayerCharacters, int numberOfEnemies) {
-        // Association between the real subscriber a.k.a PlayerCharacter's death handler, and the game controller
+    public GameController(int numberOfPlayerCharacters, int maximumOfEnemies) {
+        // Association between the real subscriber a.k.a handlers, and the game controller
         // (If there exist more than one type of notification we can have another handler -> a handler for each notification)
         playerCharacterDeathHandler = new PlayerCharacterDeathHandler(this);
         enemyDeathHandler = new EnemyDeathHandler(this);
+        playerCharacterAddToQueueHandler = new PlayerCharacterAddToQueueHandler(this);
+        enemyAddToQueueHandler = new EnemyAddToQueueHandler(this);
 
         turns = new LinkedBlockingQueue<>(); // Turns BlockingQueue
+        typeOfTurn = new LinkedBlockingQueue<>(); // Queue with the turns type (IPlayerCharacter's turns or Enemy's turns)
 
         playerCharacters = new ArrayList<>(numberOfPlayerCharacters); // Player's party
-        enemies = new ArrayList<>(numberOfEnemies); // Enemy's party
+        enemies = new ArrayList<>(maximumOfEnemies); // Enemy's party
         inventory = new Inventory(); // Inventory from the game
 
-        this.numberOfPlayerCharacters = numberOfPlayerCharacters; // Cantidad fija de playerCharacters (tamaño de la party)
-        playerCharactersAlive = numberOfPlayerCharacters; // Cantidad de playerCharacters que están vivos
-        this.numberOfEnemies = numberOfEnemies; // Cantidad fija de enemigos (tamaña de la party de enemigos)
-        enemiesAlive = numberOfEnemies; // Cantidad de enemigos que están vivos
+        this.numberOfPlayerCharacters = numberOfPlayerCharacters; // Cantidad fija de playerCharacters (tamaño exacto de la party)
+        this.maximumOfEnemies = maximumOfEnemies; // Cantidad máxima de enemigos (tamaño máximo de la party de enemigos)
+        playerCharactersAlive = 0; // Cantidad de playerCharacters que están vivos
+        enemiesAlive = 0; // Cantidad de enemigos que están vivos
     }
 
 
@@ -69,18 +77,20 @@ public class GameController {
     /**
      * add an IPlayerCharacter to the playerCharacters array if there is space
      */
-    public void addToPlayerCharacters(IPlayerCharacter character) {
-        if (playerCharacters.size() < numberOfPlayerCharacters) { // Si queda espacio en el arreglo se añade
-            playerCharacters.add(character);
+    private void addToPlayerCharacters(IPlayerCharacter character) {
+        if (playerCharacters.size() < numberOfPlayerCharacters) { // Si queda espacio en el arreglo
+            playerCharacters.add(character); // Se añade al arreglo de playerCharacters
+            playerCharactersAlive += 1; // Aumentamos la cantidad de playerCharacters que están vivos
         }
     }
 
     /**
      * add an Enemy to the enemies array if there is space
      */
-    public void addToEnemies(Enemy enemy) {
-        if (enemies.size() < numberOfEnemies) { // Si queda espacio en el arreglo se añade
-            enemies.add(enemy);
+    private void addToEnemies(Enemy enemy) {
+        if (enemies.size() < maximumOfEnemies) { // Si queda espacio en el arreglo
+            enemies.add(enemy); // Se añade al arreglo de enemies
+            enemiesAlive += 1; // Aumentamos la cantidad de enemies que están vivos
         }
     }
 
@@ -121,8 +131,8 @@ public class GameController {
     public void createBlackMage(String name, int healthPoints, int defense, int mana) { // Crea BlackMage asociado a este Game
         BlackMage blackMage = new BlackMage(name, healthPoints, defense, mana, turns);
         addToPlayerCharacters(blackMage);
-        turns.add(blackMage);
-        blackMage.addSubscriberForPlayerCharacter(playerCharacterDeathHandler);
+        blackMage.addSubscriberForDeath(playerCharacterDeathHandler);
+        blackMage.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
     }
 
     /**
@@ -131,8 +141,8 @@ public class GameController {
     public void createEngineer(String name, int healthPoints, int defense) { // Crea Engineer asociado a este Game
         Engineer engineer = new Engineer(name, healthPoints, defense, turns);
         addToPlayerCharacters(engineer);
-        turns.add(engineer);
-        engineer.addSubscriberForPlayerCharacter(playerCharacterDeathHandler);
+        engineer.addSubscriberForDeath(playerCharacterDeathHandler);
+        engineer.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
     }
 
     /**
@@ -141,8 +151,8 @@ public class GameController {
     public void createKnight(String name, int healthPoints, int defense) { // Crea Knight asociado a este Game
         Knight knight = new Knight(name, healthPoints, defense, turns);
         addToPlayerCharacters(knight);
-        turns.add(knight);
-        knight.addSubscriberForPlayerCharacter(playerCharacterDeathHandler);
+        knight.addSubscriberForDeath(playerCharacterDeathHandler);
+        knight.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
     }
 
     /**
@@ -151,8 +161,8 @@ public class GameController {
     public void createThief(String name, int healthPoints, int defense) { // Crea Thief asociado a este Game
         Thief thief = new Thief(name, healthPoints, defense, turns);
         addToPlayerCharacters(thief);
-        turns.add(thief);
-        thief.addSubscriberForPlayerCharacter(playerCharacterDeathHandler);
+        thief.addSubscriberForDeath(playerCharacterDeathHandler);
+        thief.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
     }
 
     /**
@@ -161,8 +171,8 @@ public class GameController {
     public void createWhiteMage(String name, int healthPoints, int defense, int mana) { // Crea WhiteMage asociado a este Game
         WhiteMage whiteMage = new WhiteMage(name, healthPoints, defense, mana, turns);
         addToPlayerCharacters(whiteMage);
-        turns.add(whiteMage);
-        whiteMage.addSubscriberForPlayerCharacter(playerCharacterDeathHandler);
+        whiteMage.addSubscriberForDeath(playerCharacterDeathHandler);
+        whiteMage.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
     }
 
     /**
@@ -171,8 +181,8 @@ public class GameController {
     public void createEnemy(String name, int healthPoints, int defense, int damage, int weight) { // Crea Enemy asociado a este Game
         Enemy enemy = new Enemy(name, healthPoints, defense, damage, weight, turns);
         addToEnemies(enemy);
-        turns.add(enemy);
-        enemy.addSubscriberForEnemy(enemyDeathHandler);
+        enemy.addSubscriberForDeath(enemyDeathHandler);
+        enemy.addSubscriberForAddToQueue(enemyAddToQueueHandler);
     }
 
 
@@ -270,6 +280,8 @@ public class GameController {
     public IWeapon removeWeaponFromInventory(String weaponName) { return inventory.removeWeaponFromInventory(weaponName); }
 
 
+    // Equipar armas a un IPlayerCharacter
+
     /**
      * Equips a weapon to a IPlayerCharacter
      */
@@ -292,9 +304,36 @@ public class GameController {
 
 
     /**
-     * Saca a un jugador de la cola de turnos, dando inicio a un turno
+     * Adds all the ICharacters to the turns queue
      */
-    public void beginTurn() { activeICharacter = turns.poll(); }
+    public void beginGame() {
+        // Asegurar antes de iniciar el juego que la cantidad de playerCharacters
+        // sea exactamente la indicada al inicializar el controller
+        if (playerCharactersAlive == numberOfPlayerCharacters) {
+            for (var playerCharacter : playerCharacters) {
+                playerCharacter.waitTurn();
+            }
+            for (var enemy : enemies) {
+                enemy.waitTurn();
+            }
+        }
+    }
+
+    /**
+     * Método que se llama cada vez que se añade un personaje a la cola de turnos.
+     * Se encarga de rellenar una cola paralela a la cola de turnos con un valor entero
+     * que representa un tipo de turno (IPlayerCharacter´s turn == 1 Enemy´s turn == 0)
+     */
+    public void addNewTurn(int turnType) {
+        typeOfTurn.add(turnType); // Añadimos el tipo de turno a la cola paralela
+    }
+
+    /**
+     * Selecciona a un jugador de la cola de turnos, dando inicio a un turno
+     */
+    public void beginTurn() {
+        activeICharacter = turns.peek(); // Se toma al primer personaje en la cola
+    }
 
     /**
      * Retorna el ICharacter activo a.k.a el personaje que es dueño del turno
@@ -304,20 +343,19 @@ public class GameController {
     }
 
     /**
-     * Hacer que un personaje ataque a otro (Un personaje solo puede atacar si es que es su turno)
+     * Hacer que un personaje ataque a otro (Un personaje solo puede atacar si es su turno)
      */
-    public void attackCharacter(ICharacter attackedCharacter) {
-        ICharacter actualActiveICharacter = activeICharacter; // Guardamos temporalmente el personaje que es dueño del turno
-        actualActiveICharacter.attack(attackedCharacter); // Realizamos ataque al personaje objetivo
-        beginTurn(); // Se termina el turno de este personaje, dando inicio a otro
-        // Verificar si el personaje que ataco debe volver a la cola de turnos o no
-        if (actualActiveICharacter.isAlive()) { // Si el personaje está vivo, puede seguir jugando
-            actualActiveICharacter.waitTurn(); // Lo hacemos esperar
-            turns.add(actualActiveICharacter); // Se añade a la cola de turnos
-        }
+    public void attackCharacter(ICharacter attackerCharacter, ICharacter attackedCharacter) {
+        attackerCharacter.attack(attackedCharacter); // Realizamos ataque al personaje objetivo
+        endTurn(attackerCharacter); // terminamos el turno de este personaje dando, eventualmente, inicio a otro
     }
 
+    public void endTurn(ICharacter character) {
+        turns.poll(); // Se saca al personaje de la cola
+        character.waitTurn(); // Se inicia un temporizador acorde al peso
+    }
 
+    
     // Saber inmediatamente si el jugador ganó o perdió el juego.
     // Un jugador gana cuando todos los enemigos quedan fuera de combate y pierde si sus personajes quedan fuera de combate.
 
