@@ -1,5 +1,7 @@
 package com.github.salix07.finalreality.model.character;
 
+import com.github.salix07.finalreality.controller.eventHandler.IHandler;
+
 /**
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
@@ -54,4 +56,16 @@ public interface ICharacter {
    * seconds before adding the character to the queue.
    */
   void waitTurn();
+
+  /**
+   * Adds a subscriber to this character's death event
+   * (the subscriber is the DeathHandler)
+   */
+  void addSubscriberForDeath(IHandler deathHandler);
+
+  /**
+   * Adds a subscriber to this character's add to queue event
+   * (the subscriber is the addToQueueHandler)
+   */
+  void addSubscriberForAddToQueue(IHandler addToQueueHandler);
 }

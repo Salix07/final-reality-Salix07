@@ -128,6 +128,7 @@ public abstract class AbstractCharacter implements ICharacter {
      * Adds a subscriber to this character's death event
      * (the subscriber is the DeathHandler)
      */
+    @Override
     public void addSubscriberForDeath(IHandler deathHandler) {
         characterDeathEvent.addPropertyChangeListener(deathHandler);
     }
@@ -136,6 +137,7 @@ public abstract class AbstractCharacter implements ICharacter {
      * Adds a subscriber to this character's add to queue event
      * (the subscriber is the addToQueueHandler)
      */
+    @Override
     public void addSubscriberForAddToQueue(IHandler addToQueueHandler) {
         addToQueueEvent.addPropertyChangeListener(addToQueueHandler);
     }

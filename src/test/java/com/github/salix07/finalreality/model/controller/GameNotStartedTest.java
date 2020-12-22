@@ -30,8 +30,8 @@ public class GameNotStartedTest {
         controller = new GameController(2, 2);
 
         controller.createBlackMage("Morgana", 10, 5, 5);
-        controller.createEnemy("Goblin", 10, 5, 15, 15);
-        controller.createEnemy("Troll", 10, 5, 15, 35);
+        controller.createEnemy("Goblin", 10, 5, 15, 10);
+        controller.createEnemy("Troll", 10, 5, 15, 20);
 
         controller.createStaff("VoidStaff", 15, 15, 5);
 
@@ -46,14 +46,27 @@ public class GameNotStartedTest {
     @Test
     void gameNotStartedYet() throws InterruptedException {
         // Try to start the game with less playerCharacters than the value passed at the controller
-        // In this case the game must not start so the activeICharacter must be null
+        // In this case the game must not start so the activeICharacter must be null and the phase mustn't change
+        assertTrue(controller.getPhase().isStartGamePhase());
+        assertFalse(controller.getPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getPhase().isTurnPhase());
+        assertFalse(controller.getPhase().isSelectingActionPhase());
+        assertFalse(controller.getPhase().isGameOverPhase());
+
         controller.beginGame();
+
+        assertTrue(controller.getPhase().isStartGamePhase());
+        assertFalse(controller.getPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getPhase().isTurnPhase());
+        assertFalse(controller.getPhase().isSelectingActionPhase());
+        assertFalse(controller.getPhase().isGameOverPhase());
+
         turnCharacter = controller.getActiveICharacter();
         assertNull(turnCharacter);
 
         // Create the missing character
         controller.createKnight("Jarvan", 10, 5);
-        controller.createAxe("Storm Breaker", 15, 25);
+        controller.createAxe("Storm Breaker", 15, 15);
         jarvan = controller.getPlayerCharacter(1);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
         controller.equipPlayerCharacter(jarvan, stormBreaker);
@@ -61,8 +74,10 @@ public class GameNotStartedTest {
         // The game now can start
         controller.beginGame();
         Thread.sleep(5000);
-        controller.beginTurn();
-        turnCharacter = controller.getActiveICharacter();
-        assertEquals(morgana, turnCharacter);
+        assertFalse(controller.getPhase().isStartGamePhase());
+        assertFalse(controller.getPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getPhase().isTurnPhase());
+        assertFalse(controller.getPhase().isSelectingActionPhase());
+        assertTrue(controller.getPhase().isGameOverPhase());
     }
 }
