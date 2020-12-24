@@ -48,11 +48,11 @@ public class EnemyWinsTest {
 
         jarvan = controller.getPlayerCharacter(0);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
-        controller.equipPlayerCharacter(jarvan, stormBreaker);
+        controller.tryToEquipPlayerCharacter(jarvan, stormBreaker);
 
         morgana = controller.getPlayerCharacter(1);
         voidStaff = controller.selectWeaponFromInventory("VoidStaff");
-        controller.equipPlayerCharacter(morgana, voidStaff);
+        controller.tryToEquipPlayerCharacter(morgana, voidStaff);
     }
 
     /**
@@ -65,7 +65,7 @@ public class EnemyWinsTest {
         turnCharacter = controller.getActiveICharacter();
         assertNull(turnCharacter);
 
-        controller.beginGame();
+        controller.startGame();
         Thread.sleep(5000);;
 
         turnCharacter = controller.getActiveICharacter();
@@ -102,7 +102,7 @@ public class EnemyWinsTest {
         assertFalse(controller.playerWin());
         assertFalse(controller.enemyWin());
 
-        controller.beginGame();
+        controller.tryToStartGame();
         Thread.sleep(5000);
 
         assertFalse(jarvan.isAlive());

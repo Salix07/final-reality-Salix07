@@ -45,11 +45,11 @@ public class PlayerWinsTest {
 
         morgana = controller.getPlayerCharacter(0);
         voidStaff = controller.selectWeaponFromInventory("VoidStaff");
-        controller.equipPlayerCharacter(morgana, voidStaff);
+        controller.tryToEquipPlayerCharacter(morgana, voidStaff);
 
         jarvan = controller.getPlayerCharacter(1);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
-        controller.equipPlayerCharacter(jarvan, stormBreaker);
+        controller.tryToEquipPlayerCharacter(jarvan, stormBreaker);
 
         goblin = controller.getEnemy(0);
         troll = controller.getEnemy(1);
@@ -65,7 +65,7 @@ public class PlayerWinsTest {
         turnCharacter = controller.getActiveICharacter();
         assertNull(turnCharacter);
 
-        controller.beginGame();
+        controller.startGame();
         Thread.sleep(5000);
 
         turnCharacter = controller.getActiveICharacter();
@@ -102,7 +102,7 @@ public class PlayerWinsTest {
         assertFalse(controller.playerWin());
         assertFalse(controller.enemyWin());
 
-        controller.beginGame();
+        controller.tryToStartGame();
         Thread.sleep(5000);
 
         assertFalse(goblin.isAlive());

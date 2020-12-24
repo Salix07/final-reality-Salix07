@@ -28,11 +28,9 @@ public class GameController {
     // Handlers for different events
     private final PlayerCharacterDeathHandler playerCharacterDeathHandler;
     private final EnemyDeathHandler enemyDeathHandler;
-    private final PlayerCharacterAddToQueueHandler playerCharacterAddToQueueHandler;
-    private final EnemyAddToQueueHandler enemyAddToQueueHandler;
+    private final ICharacterAddToQueueHandler characterAddToQueueHandler;
 
     private BlockingQueue<ICharacter> turns; // Turns BlockingQueue
-    private BlockingQueue<Integer> typeOfTurn; // Queue with turns type (IPlayerCharacter´s turn == 1 Enemy´s turn == 0)
 
     private ArrayList<IPlayerCharacter> playerCharacters; // Player's party
     private ArrayList<Enemy> enemies; // Enemy's party
@@ -61,15 +59,13 @@ public class GameController {
         // (If there exist more than one type of notification we can have another handler -> a handler for each notification)
         playerCharacterDeathHandler = new PlayerCharacterDeathHandler(this);
         enemyDeathHandler = new EnemyDeathHandler(this);
-        playerCharacterAddToQueueHandler = new PlayerCharacterAddToQueueHandler(this);
-        enemyAddToQueueHandler = new EnemyAddToQueueHandler(this);
+        characterAddToQueueHandler = new ICharacterAddToQueueHandler(this);
 
         turns = new LinkedBlockingQueue<>(); // Turns BlockingQueue
-        typeOfTurn = new LinkedBlockingQueue<>(); // Queue with the turns type (IPlayerCharacter's turns or Enemy's turns)
 
         playerCharacters = new ArrayList<>(numberOfPlayerCharacters); // Player's party
         enemies = new ArrayList<>(maximumOfEnemies); // Enemy's party
-        inventory = new Inventory(); // Inventory from the game
+        inventory = new Inventory(10); // Inventory from the game (Max 10 weapons)
 
         this.numberOfPlayerCharacters = numberOfPlayerCharacters; // Cantidad fija de playerCharacters (tamaño exacto de la party)
         this.maximumOfEnemies = maximumOfEnemies; // Cantidad máxima de enemigos (tamaño máximo de la party de enemigos)
@@ -93,9 +89,11 @@ public class GameController {
     /**
      * @return the phase of the game
      */
-    public Phase getPhase() {
+    public Phase getCurrentPhase() {
         return this.phase;
     }
+
+    public String getCurrentPhaseName(){ return this.phase.getName();}
 
 
     // Manejar arreglos que contienen a los personajes del jugador y a los enemigos
@@ -108,7 +106,7 @@ public class GameController {
             playerCharacters.add(character); // Se añade al arreglo de playerCharacters
             playerCharactersAlive += 1; // Aumentamos la cantidad de playerCharacters que están vivos
             character.addSubscriberForDeath(playerCharacterDeathHandler);
-            character.addSubscriberForAddToQueue(playerCharacterAddToQueueHandler);
+            character.addSubscriberForAddToQueue(characterAddToQueueHandler);
         }
     }
 
@@ -120,7 +118,7 @@ public class GameController {
             enemies.add(enemy); // Se añade al arreglo de enemies
             enemiesAlive += 1; // Aumentamos la cantidad de enemies que están vivos
             enemy.addSubscriberForDeath(enemyDeathHandler);
-            enemy.addSubscriberForAddToQueue(enemyAddToQueueHandler);
+            enemy.addSubscriberForAddToQueue(characterAddToQueueHandler);
         }
     }
 
@@ -266,6 +264,10 @@ public class GameController {
         }
     }
 
+    public Fists getFistsUniqueInstance() {
+        return Fists.getFistsUniqueInstance();
+    }
+
 
     // Saber cuáles son los personajes del jugador y cuáles son sus datos (vida, ataque, etc.)
     // Tener conocimiento de los enemigos y sus datos -> Getters
@@ -283,8 +285,33 @@ public class GameController {
     }
     public int getManaFrom(IMage mage) {return mage.getMana();}
     public IWeapon getWeaponFrom(IPlayerCharacter character) {return character.getEquippedWeapon();}
+    public int getWeaponWeightOff(IWeapon weapon) {return weapon.getWeight();}
     public int getWeightFrom(Enemy enemy) {
         return enemy.getWeight();
+    }
+
+    public String getPlayerCharacterNameByIndex(int index) { return getNameFrom(getPlayerCharacter(index)); }
+    public String getEnemyNameByIndex(int index) { return getNameFrom(getEnemy(index)); }
+
+    public int getPlayerCharacterHealthByIndex(int index) { return getHealthPointsFrom(getPlayerCharacter(index)); }
+    public int getEnemyHealthByIndex(int index) { return getHealthPointsFrom(getEnemy(index)); }
+
+    public int getPlayerCharacterDefenseByIndex(int index) { return getDefenseFrom(getPlayerCharacter(index)); }
+    public int getEnemyDefenseByIndex(int index) { return getDefenseFrom(getEnemy(index)); }
+
+    public int getPlayerCharacterAttackByIndex(int index) { return getAttackDamageFrom(getPlayerCharacter(index)); }
+    public int getEnemyAttackByIndex(int index) { return getAttackDamageFrom(getEnemy(index)); }
+
+    public int getWeightOffEquippedWeaponByIndex(int index) { return getWeaponWeightOff(getWeaponFrom(getPlayerCharacter(index))); }
+    public int getEnemyWeightByIndex(int index) { return getWeightFrom(getEnemy(index)); }
+
+    public String getNameOffEquippedWeaponByIndex(int index) {
+        IWeapon weapon = getWeaponFrom(getPlayerCharacter(index));
+        String weaponName = "No weapon Equipped!";
+        if(weapon != null) {
+            weaponName = weapon.getName();
+        }
+        return weaponName;
     }
 
 
@@ -322,79 +349,75 @@ public class GameController {
 
     // Equipar armas a un IPlayerCharacter
 
+    public void tryToEquipPlayerCharacter(IPlayerCharacter playerCharacter, IWeapon weapon) {
+        phase.tryToEquipPlayerCharacter(playerCharacter, weapon);
+    }
     /**
      * Equips a weapon to a IPlayerCharacter
      */
     public void equipPlayerCharacter(IPlayerCharacter playerCharacter, IWeapon weapon) {
-        if (phase.isStartGamePhase() || phase.isSelectingActionPhase()) {
-            IWeapon oldWeapon = playerCharacter.getEquippedWeapon(); // Arma antigua que posee el IPlayerCharacter
-            IWeapon inventoryWeapon = removeWeaponFromInventory(weapon.getName()); // Arma que se intentará equipar
-            playerCharacter.equip(inventoryWeapon); // Intentamos equipar el arma
-            IWeapon actualWeapon = playerCharacter.getEquippedWeapon(); // Arma actual que posee el IPlayerCharacter
-            if (actualWeapon == null) { // Si no logramos equipar el arma, se devuelve el arma que se intentó equipar al inventario
-                putWeaponInInventory(weapon);
-            } else if (!(actualWeapon.equals(weapon))) { // Si arma actual sigue siendo la antigua, devolvemos el arma que se intentó equipar al inventario
-                putWeaponInInventory(weapon);
-            }
-            // Swap de armas
-            else { // actualWeapon != null && actualWeapon == weapon -> Se logró equipar el arma, devolvemos el arma antigua al inventario
-                putWeaponInInventory(oldWeapon);
-            }
+        IWeapon oldWeapon = playerCharacter.getEquippedWeapon(); // Arma antigua que posee el IPlayerCharacter
+        IWeapon inventoryWeapon = removeWeaponFromInventory(weapon.getName()); // Arma que se intentará equipar
+        playerCharacter.equip(inventoryWeapon); // Intentamos equipar el arma
+        IWeapon actualWeapon = playerCharacter.getEquippedWeapon(); // Arma actual que posee el IPlayerCharacter
+        if (actualWeapon == null) { // Si no logramos equipar el arma, se devuelve el arma que se intentó equipar al inventario
+            putWeaponInInventory(weapon);
+        } else if (!(actualWeapon.equals(weapon))) { // Si arma actual sigue siendo la antigua, devolvemos el arma que se intentó equipar al inventario
+            putWeaponInInventory(weapon);
+        }
+        // Swap de armas
+        else { // actualWeapon != null && actualWeapon == weapon -> Se logró equipar el arma, devolvemos el arma antigua al inventario
+            putWeaponInInventory(oldWeapon);
         }
     }
 
+    public void tryToStartGame() { phase.tryToStartGame();}
     /**
      * Adds all the ICharacters to the turns queue
      */
-    public void beginGame() {
-        if(phase.isStartGamePhase()) {
-            // Asegurar antes de iniciar el juego que la cantidad de playerCharacters
-            // sea exactamente la indicada al inicializar el controller
-            if (playerCharactersAlive == numberOfPlayerCharacters) {
-                for (var playerCharacter : playerCharacters) {
-                    playerCharacter.waitTurn();
-                }
-                for (var enemy : enemies) {
-                    enemy.waitTurn();
-                }
-
-                phase.toWaitingForTurnPhase();
+    public void startGame() {
+        // Asegurar antes de iniciar el juego que la cantidad de playerCharacters
+        // sea exactamente la indicada al inicializar el controller
+        if (playerCharactersAlive == numberOfPlayerCharacters) {
+            for (var playerCharacter : playerCharacters) {
+                playerCharacter.waitTurn();
             }
+            for (var enemy : enemies) {
+                enemy.waitTurn();
+            }
+
+            phase.toWaitingForTurnPhase();
         }
     }
 
     /**
      * Método que se llama cada vez que se añade un personaje a la cola de turnos.
-     * Se encarga de rellenar una cola paralela a la cola de turnos con un valor entero
-     * que representa un tipo de turno (IPlayerCharacter´s turn == 1 Enemy´s turn == 0)
+     * Intenta tomar un turno si se está en la fase correcta y es posible tomarlo
      */
-    public void addNewTurn(int turnType) {
-        typeOfTurn.add(turnType); // Añadimos el tipo de turno a la cola paralela
-        tryToTakeTurn();
-    }
-
     public void tryToTakeTurn() {
         if(phase.isWaitingForTurnPhase() && canTakeTurn) {
             canTakeTurn = false;
             System.out.println("Trying to begin a turn");
             phase.toTurnPhase();
-            beginTurn();
+            tryToBeginTurn();
         }
         else {
             System.out.println("Can't take the turn, keep waiting");
         }
     }
 
+    public void tryToBeginTurn() {phase.tryToBeginTurn();}
+
     /**
      * Selecciona a un jugador de la cola de turnos, dando inicio a un turno
      */
     public void beginTurn() {
-        if (phase.isTurnPhase() && !turnTaken) {
-            System.out.println(turns);
-            System.out.println(typeOfTurn);
+        if (!turnTaken) {
             turnTaken = true;
             activeICharacter = turns.peek(); // Se toma al primer personaje en la cola
-            turnType = typeOfTurn.peek();
+            turnType = activeICharacter.turnType();
+            System.out.println(turns);
+            System.out.println(turnType);
             System.out.println("A new turn has started");
             System.out.println(activeICharacter.getName() + " has begin his turn");
             phase.toSelectingActionPhase();
@@ -402,12 +425,12 @@ public class GameController {
                 if (turnType == 0) { // Es turno de enemigo, se ataca aleatoriamente a un playerCharacter
                     IPlayerCharacter randomAliveTarget = rndAlivePlayerCharacter();
                     System.out.println(activeICharacter.getName() + " attacked " + randomAliveTarget.getName());
-                    attackCharacter(activeICharacter, randomAliveTarget);
+                    tryToAttackCharacter(activeICharacter, randomAliveTarget);
                 }
                 else  { // turnType == 1 -> Es turno de playerCharacter
                     Enemy randomAliveTarget = rndAliveEnemy();
                     System.out.println(activeICharacter.getName() + " attacked " + randomAliveTarget.getName());
-                    attackCharacter(activeICharacter, randomAliveTarget);
+                    tryToAttackCharacter(activeICharacter, randomAliveTarget);
                 }
             }
 
@@ -449,25 +472,26 @@ public class GameController {
         return activeICharacter;
     }
 
+    public void tryToAttackCharacter(ICharacter attackerCharacter, ICharacter attackedCharacter) {
+        phase.tryToAttackCharacter(attackerCharacter, attackedCharacter);
+    }
+
     /**
      * Hacer que un personaje ataque a otro (Un personaje solo puede atacar si es su turno)
      */
     public void attackCharacter(ICharacter attackerCharacter, ICharacter attackedCharacter) {
-        if (phase.isSelectingActionPhase()) {
             attackerCharacter.attack(attackedCharacter); // Realizamos ataque al personaje objetivo
             System.out.println("PlayerCharacters Alive: " + playerCharactersAlive);
             System.out.println("Enemies Alive: " + enemiesAlive);
             System.out.println("Attacked Character Health: " + attackedCharacter.getHealthPoints());
             endTurn(attackerCharacter); // terminamos el turno de este personaje dando, eventualmente, inicio a otro
-        }
     }
 
     public void endTurn(ICharacter character) {
         System.out.println(character.getName() + " end his turn");
-        turnTaken = false;
         canTakeTurn = true;
+        turnTaken = false;
         turns.poll(); // Se saca al personaje de la cola
-        typeOfTurn.poll();
         phase.toWaitingForTurnPhase();
         System.out.println("turn is free and can begin a new one");
         if (!turns.isEmpty()) { // Si hay más personajes en la cola de turnos
@@ -508,7 +532,7 @@ public class GameController {
     /**
      * Método que se ejecuta cuando se notifica al PlayerCharacterDeathHandler sobre un cambio (muerte de PlayerCharacter)
      */
-    public void onPlayerCharacterDeath(IPlayerCharacter playerCharacter) {
+    public void onPlayerCharacterDeath() {
         playerCharactersAlive -= 1;
         if (enemyWin()) {
             phase.toGameOverPhase();
@@ -519,11 +543,19 @@ public class GameController {
     /**
      * Método que se ejecuta cuando se notifica al EnemyDeathHandler sobre un cambio (muerte de Enemy)
      */
-    public void onEnemyDeath(Enemy enemy) {
+    public void onEnemyDeath() {
         enemiesAlive -= 1;
         if (playerWin()) {
             phase.toGameOverPhase();
             gameOver();
         }
+    }
+
+    public int getPlayerCharactersAlive() {
+        return playerCharactersAlive;
+    }
+
+    public int getNumberOfPlayerCharacters() {
+        return numberOfPlayerCharacters;
     }
 }

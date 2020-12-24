@@ -68,4 +68,11 @@ public interface ICharacter {
    * (the subscriber is the addToQueueHandler)
    */
   void addSubscriberForAddToQueue(IHandler addToQueueHandler);
+
+  /**
+   * @return int value that represents this character class, so with this int we can know what kind of turn it is
+   * if the value is 1, it is a playerCharacter and the turn will be playerCharacter's one
+   * if the value is 0, it is an enemy and the turn will be enemy's one
+   */
+  int turnType();
 }

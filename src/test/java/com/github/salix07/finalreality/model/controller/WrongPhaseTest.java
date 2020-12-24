@@ -36,7 +36,7 @@ public class WrongPhaseTest {
 
         jarvan = controller.getPlayerCharacter(0);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
-        controller.equipPlayerCharacter(jarvan, stormBreaker);
+        controller.tryToEquipPlayerCharacter(jarvan, stormBreaker);
         infinityEdge = controller.selectWeaponFromInventory("Infinity Edge");
 
         troll = controller.getEnemy(0);
@@ -48,32 +48,32 @@ public class WrongPhaseTest {
     @Test
     void wrongPhaseTest() throws InterruptedException {
         // The game start at StartGamePhase()
-        assertTrue(controller.getPhase().isStartGamePhase());
-        assertFalse(controller.getPhase().isWaitingForTurnPhase());
-        assertFalse(controller.getPhase().isTurnPhase());
-        assertFalse(controller.getPhase().isSelectingActionPhase());
-        assertFalse(controller.getPhase().isGameOverPhase());
+        assertTrue(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isGameOverPhase());
 
         // We can´t begin a turn, or attack
-        controller.beginTurn();
+        controller.tryToBeginTurn();
         turnCharacter = controller.getActiveICharacter();
         assertNull(turnCharacter);
 
         assertTrue(troll.isAlive());
         assertEquals(10, troll.getHealthPoints());
-        controller.attackCharacter(jarvan, troll);
+        controller.tryToAttackCharacter(jarvan, troll);
         assertTrue(troll.isAlive());
         assertEquals(10, troll.getHealthPoints());
 
-        controller.beginGame();
+        controller.tryToStartGame();
         Thread.sleep(5000);
 
         // Now the game is ended and the game is at GameOverPhase()
-        assertFalse(controller.getPhase().isStartGamePhase());
-        assertFalse(controller.getPhase().isWaitingForTurnPhase());
-        assertFalse(controller.getPhase().isTurnPhase());
-        assertFalse(controller.getPhase().isSelectingActionPhase());
-        assertTrue(controller.getPhase().isGameOverPhase());
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertTrue(controller.getCurrentPhase().isGameOverPhase());
 
         // We can´t create IPlayerCharacters or enemies
         assertEquals(1, controller.getPlayerCharacters().size());
@@ -113,15 +113,15 @@ public class WrongPhaseTest {
         // We can't equip a character
         assertEquals(stormBreaker, controller.getWeaponFrom(jarvan));
         assertTrue(controller.isWeaponInInventory(infinityEdge.getName()));
-        controller.equipPlayerCharacter(jarvan, infinityEdge);
+        controller.tryToEquipPlayerCharacter(jarvan, infinityEdge);
         assertEquals(stormBreaker, controller.getWeaponFrom(jarvan));
         assertTrue(controller.isWeaponInInventory(infinityEdge.getName()));
 
         // We can´t begin the game
-        assertFalse(controller.getPhase().isStartGamePhase());
-        assertTrue(controller.getPhase().isGameOverPhase());
-        controller.beginGame();
-        assertFalse(controller.getPhase().isStartGamePhase());
-        assertTrue(controller.getPhase().isGameOverPhase());
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertTrue(controller.getCurrentPhase().isGameOverPhase());
+        controller.tryToStartGame();
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertTrue(controller.getCurrentPhase().isGameOverPhase());
     }
 }

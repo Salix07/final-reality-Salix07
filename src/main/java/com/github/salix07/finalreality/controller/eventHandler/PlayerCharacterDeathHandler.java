@@ -29,6 +29,6 @@ public class PlayerCharacterDeathHandler implements IHandler { // Implementa la 
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        controller.onPlayerCharacterDeath((IPlayerCharacter) evt.getNewValue());
+        controller.onPlayerCharacterDeath();
     }
 }

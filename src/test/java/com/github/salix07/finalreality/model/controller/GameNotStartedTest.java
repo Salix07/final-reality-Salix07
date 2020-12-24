@@ -1,6 +1,7 @@
 package com.github.salix07.finalreality.model.controller;
 
 import com.github.salix07.finalreality.controller.GameController;
+import com.github.salix07.finalreality.controller.phases.Phase;
 import com.github.salix07.finalreality.model.character.Enemy;
 import com.github.salix07.finalreality.model.character.ICharacter;
 import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
@@ -37,7 +38,7 @@ public class GameNotStartedTest {
 
         morgana = controller.getPlayerCharacter(0);
         voidStaff = controller.selectWeaponFromInventory("VoidStaff");
-        controller.equipPlayerCharacter(morgana, voidStaff);
+        controller.tryToEquipPlayerCharacter(morgana, voidStaff);
 
         goblin = controller.getEnemy(0);
         troll = controller.getEnemy(1);
@@ -47,19 +48,25 @@ public class GameNotStartedTest {
     void gameNotStartedYet() throws InterruptedException {
         // Try to start the game with less playerCharacters than the value passed at the controller
         // In this case the game must not start so the activeICharacter must be null and the phase mustn't change
-        assertTrue(controller.getPhase().isStartGamePhase());
-        assertFalse(controller.getPhase().isWaitingForTurnPhase());
-        assertFalse(controller.getPhase().isTurnPhase());
-        assertFalse(controller.getPhase().isSelectingActionPhase());
-        assertFalse(controller.getPhase().isGameOverPhase());
+        assertTrue(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isGameOverPhase());
 
-        controller.beginGame();
+        assertEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertEquals(controller.getCurrentPhaseName(), controller.getCurrentPhase().getName());
 
-        assertTrue(controller.getPhase().isStartGamePhase());
-        assertFalse(controller.getPhase().isWaitingForTurnPhase());
-        assertFalse(controller.getPhase().isTurnPhase());
-        assertFalse(controller.getPhase().isSelectingActionPhase());
-        assertFalse(controller.getPhase().isGameOverPhase());
+        controller.tryToStartGame();
+
+        assertTrue(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isGameOverPhase());
+
+        assertEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertEquals(controller.getCurrentPhaseName(), controller.getCurrentPhase().getName());
 
         turnCharacter = controller.getActiveICharacter();
         assertNull(turnCharacter);
@@ -69,15 +76,18 @@ public class GameNotStartedTest {
         controller.createAxe("Storm Breaker", 15, 15);
         jarvan = controller.getPlayerCharacter(1);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
-        controller.equipPlayerCharacter(jarvan, stormBreaker);
+        controller.tryToEquipPlayerCharacter(jarvan, stormBreaker);
 
         // The game now can start
-        controller.beginGame();
+        controller.tryToStartGame();
         Thread.sleep(5000);
-        assertFalse(controller.getPhase().isStartGamePhase());
-        assertFalse(controller.getPhase().isWaitingForTurnPhase());
-        assertFalse(controller.getPhase().isTurnPhase());
-        assertFalse(controller.getPhase().isSelectingActionPhase());
-        assertTrue(controller.getPhase().isGameOverPhase());
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertTrue(controller.getCurrentPhase().isGameOverPhase());
+
+        assertEquals("Game Over Phase", controller.getCurrentPhaseName());
+        assertEquals(controller.getCurrentPhaseName(), controller.getCurrentPhase().getName());
     }
 }

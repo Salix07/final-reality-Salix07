@@ -9,4 +9,10 @@ public class TurnPhase extends Phase {
 
     @Override
     public boolean isTurnPhase() {return true;}
+
+    @Override
+    public void tryToBeginTurn() {controller.beginTurn();}
+
+    @Override
+    public String getName() { return "Turn Phase";}
 }

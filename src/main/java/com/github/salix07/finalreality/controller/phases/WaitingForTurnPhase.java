@@ -9,4 +9,7 @@ public class WaitingForTurnPhase extends Phase {
 
     @Override
     public boolean isWaitingForTurnPhase() {return true;}
+
+    @Override
+    public String getName() { return "Waiting For Turn Phase";}
 }
