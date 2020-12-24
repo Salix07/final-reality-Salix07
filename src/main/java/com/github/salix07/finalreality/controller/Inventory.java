@@ -12,12 +12,14 @@ import java.util.HashMap;
  */
 public class Inventory {
     private HashMap<String, IWeapon> inventory;
+    private int maxSize;
 
     /**
      * Constructor of the class Inventory, here the inventory is initialized as a Hashmap
      */
-    public Inventory() {
-        inventory = new HashMap<>(); // Inventory initialization as a hashmap
+    public Inventory(int maxSize) {
+        inventory = new HashMap<>(maxSize); // Inventory initialization as a hashmap
+        this.maxSize = maxSize; // Max size of the inventory
     }
 
     /**
@@ -29,7 +31,9 @@ public class Inventory {
      * Puts an IWeapon in inventory, where the key is the weapon's name and the value is the weapon itself
      */
     public void putWeaponInInventory(IWeapon weapon) {
-        inventory.put(weapon.getName(), weapon);
+        if(inventory.size() < maxSize) {
+            inventory.put(weapon.getName(), weapon);
+        }
     }
 
     /**

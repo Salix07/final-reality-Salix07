@@ -74,6 +74,16 @@ public class Enemy extends AbstractCharacter {
             .schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
   }
 
+  /**
+   * @return int value that represents this character class, so with this int we can know what kind of turn it is
+   * if the value is 1, it is a playerCharacter and the turn will be playerCharacter's one
+   * if the value is 0, it is an enemy and the turn will be enemy's one
+   */
+  @Override
+  public int turnType() {
+    return 0; // int that represents this character class
+  }
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

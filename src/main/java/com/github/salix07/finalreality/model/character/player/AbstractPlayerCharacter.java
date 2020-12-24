@@ -75,4 +75,14 @@ public abstract class AbstractPlayerCharacter extends AbstractCharacter implemen
     scheduledExecutor
             .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
   }
+
+  /**
+   * @return int value that represents this character class, so with this int we can know what kind of turn it is
+   * if the value is 1, it is a playerCharacter and the turn will be playerCharacter's one
+   * if the value is 0, it is an enemy and the turn will be enemy's one
+   */
+  @Override
+  public int turnType() {
+    return 1; // int that represents this character class
+  }
 }

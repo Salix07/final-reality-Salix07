@@ -29,6 +29,6 @@ public class EnemyDeathHandler implements IHandler { // Implementa la interfaz d
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        controller.onEnemyDeath((Enemy) evt.getNewValue());
+        controller.onEnemyDeath();
     }
 }
