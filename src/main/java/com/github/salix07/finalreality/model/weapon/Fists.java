@@ -42,4 +42,10 @@ public class Fists extends AbstractWeapon {
         whiteMage.setEquippedWeapon(this);
     }
 
+    /**
+     * toString method, returns String representing the class of this weapon
+     */
+    @Override
+    public String toString() {return "Fists";}
+
 }

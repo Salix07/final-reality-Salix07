@@ -84,6 +84,12 @@ public class Enemy extends AbstractCharacter {
     return 0; // int that represents this character class
   }
 
+  /**
+   * toString method, returns String representing the enemy class
+   */
+  @Override
+  public String toString() {return "Enemy";}
+
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

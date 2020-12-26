@@ -44,6 +44,12 @@ public class WhiteMage extends AbstractMage {
         weapon.equipToWhiteMage(this);
     }
 
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "WhiteMage";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

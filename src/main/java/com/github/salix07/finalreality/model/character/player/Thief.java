@@ -42,6 +42,12 @@ public class Thief  extends AbstractPlayerCharacter {
         weapon.equipToThief(this);
     }
 
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "Thief";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

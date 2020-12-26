@@ -42,6 +42,12 @@ public class Knight extends AbstractPlayerCharacter {
         weapon.equipToKnight(this);
     }
 
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "Knight";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

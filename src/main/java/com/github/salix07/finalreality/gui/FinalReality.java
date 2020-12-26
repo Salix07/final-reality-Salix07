@@ -1,6 +1,7 @@
 package com.github.salix07.finalreality.gui;
 
 import com.github.salix07.finalreality.controller.GameController;
+import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -11,9 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +23,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * Main entry point for the application.
@@ -37,9 +34,9 @@ import java.util.HashMap;
  */
 public class FinalReality extends Application {
   private Stage window;
-  private Scene mainMenuScene, playerCreatorScene, weaponCreatorScene, equipScene, combatScene;
+  private Scene mainMenuScene, playerCreatorScene, weaponCreatorScene, equipCharacterScene, combatScene, changeWeaponScene, gameOverScene;
   int partySize, enemyPartySize;
-  private HashMap<Integer, String> charactersNameClass;
+  String turnCharacterName;
   GameController controller;
 
   public static void main(String[] args) {
@@ -56,7 +53,7 @@ public class FinalReality extends Application {
     window = primaryStage;
     partySize = 0;
     enemyPartySize = 0;
-    charactersNameClass = new HashMap<>();
+    turnCharacterName = "";
     Scene scene = setControllerScene();
     primaryStage.setScene(scene);
     primaryStage.setTitle("Final Reality");
@@ -67,7 +64,7 @@ public class FinalReality extends Application {
 
 
   private static void playSound() {
-    String audioFilePath = "mediaFiles/musicaAscensor.wav";
+    String audioFilePath = "mediaFiles/piercingLight.wav";
     try {
       Clip sound = AudioSystem.getClip();
       try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
@@ -134,8 +131,8 @@ public class FinalReality extends Application {
     enterEnemyPartySize.setPrefWidth(300);
     enterEnemyPartySize.setOnAction(actionEevent -> {
       enemyPartySize = Integer.parseInt(enemyPartySizeText.getText());
-      if(enemyPartySize > 5) {
-        enemyPartySize = 5;
+      if(enemyPartySize > 10) {
+        enemyPartySize = 10;
       }
       if(enemyPartySize < 1) {
         enemyPartySize = 1;
@@ -199,7 +196,7 @@ public class FinalReality extends Application {
     GridPane controllerScenePane = new GridPane();
     controllerScenePane.setAlignment(Pos.TOP_CENTER);
     controllerScenePane.setVgap(15);
-    controllerScenePane.setPadding(new Insets(10, 10, 10, 100)); //margins around the whole grid
+    controllerScenePane.setPadding(new Insets(10, 10, 10, 100)); //margins around the whole grid (top/right/bottom/left)
     controllerScenePane.add(controllerTitleLabel,0,0,1,1);
     controllerScenePane.add(textPartySizePane,0,3,1,1);
     controllerScenePane.add(partySizePane,0,4,1,1);
@@ -266,17 +263,21 @@ public class FinalReality extends Application {
     equipButton.setFont(new Font("Arial rounded Mt Bold", 20));
     equipButton.setPrefWidth(300);
     equipButton.setOnAction(event -> {
-      if(controller.getPlayerCharactersAlive() == controller.getNumberOfPlayerCharacters()) {
-        equipScene = equipCharacterScene();
-        window.setScene(equipScene);
+      if(controller.getPlayerCharactersAlive() == partySize) {
+        try {
+          equipCharacterScene = equipCharacterScene();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
+        window.setScene(equipCharacterScene);
       }
     });
 
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(final long now) {
-        playerCreatorLabel.setText("You must create " + (controller.getNumberOfPlayerCharacters() - controller.getPlayerCharactersAlive()) + " PlayerCharacters more");
-        if((controller.getNumberOfPlayerCharacters() - controller.getPlayerCharactersAlive()) == 0) {
+        playerCreatorLabel.setText("You must create " + (partySize - controller.getPlayerCharactersAlive()) + " PlayerCharacters more");
+        if((partySize - controller.getPlayerCharactersAlive()) == 0) {
           equipLabel.setVisible(true);
           equipButton.setVisible(true);
         }
@@ -294,7 +295,7 @@ public class FinalReality extends Application {
     GridPane menuPane = new GridPane();
     menuPane.setAlignment(Pos.TOP_CENTER);
     menuPane.setVgap(50);
-    menuPane.setPadding(new Insets(10, 10, 10, 10)); //margins around the whole grid
+    menuPane.setPadding(new Insets(10, 10, 10, 10)); //margins around the whole grid (top/right/bottom/left)
     menuPane.add(phaseLabel,0,0,1,1);
     menuPane.add(menuOptionsPane,0,3,1,1);
 
@@ -342,7 +343,7 @@ public class FinalReality extends Application {
     AnimationTimer timer = new AnimationTimer() {
       @Override
       public void handle(final long now) {
-        characterRemainingLabel.setText("You have created " + controller.getPlayerCharactersAlive() + "/" + controller.getNumberOfPlayerCharacters() + " PlayerCharacters");
+        characterRemainingLabel.setText("You have created " + controller.getPlayerCharactersAlive() + "/" + partySize + " PlayerCharacters");
       }
     };
     timer.start();
@@ -440,7 +441,7 @@ public class FinalReality extends Application {
     healthPointsLabel.setFont(new Font("Arial rounded Mt Bold", 15));
     TextField healthPoints = new TextField();
     healthPoints.setFont(new Font("Arial rounded Mt Bold", 13));
-    healthPoints.setPromptText(characterClass + "'s health points");
+    healthPoints.setPromptText(characterClass + "'s health");
 
     Label defenseLabel = new Label("Defense: ");
     defenseLabel.setFont(new Font("Arial rounded Mt Bold", 15));
@@ -462,11 +463,9 @@ public class FinalReality extends Application {
                   Integer.parseInt(defense.getText()),
                   10
           );
-          System.out.println(controller.getPlayerCharacters());
           name.setText("");
           healthPoints.setText("");
           defense.setText("");
-          charactersNameClass.put(controller.getPlayerCharactersAlive(), "BlackMage");
         });
         break;
 
@@ -477,11 +476,9 @@ public class FinalReality extends Application {
                   Integer.parseInt(healthPoints.getText()),
                   Integer.parseInt(defense.getText())
           );
-          System.out.println(controller.getPlayerCharacters());
           name.setText("");
           healthPoints.setText("");
           defense.setText("");
-          charactersNameClass.put(controller.getPlayerCharactersAlive(), "Engineer");
         });
         break;
 
@@ -492,11 +489,9 @@ public class FinalReality extends Application {
                   Integer.parseInt(healthPoints.getText()),
                   Integer.parseInt(defense.getText())
           );
-          System.out.println(controller.getPlayerCharacters());
           name.setText("");
           healthPoints.setText("");
           defense.setText("");
-          charactersNameClass.put(controller.getPlayerCharactersAlive(), "Knight");
         });
         break;
 
@@ -507,11 +502,9 @@ public class FinalReality extends Application {
                   Integer.parseInt(healthPoints.getText()),
                   Integer.parseInt(defense.getText())
           );
-          System.out.println(controller.getPlayerCharacters());
           name.setText("");
           healthPoints.setText("");
           defense.setText("");
-          charactersNameClass.put(controller.getPlayerCharactersAlive(), "Thief");
         });
         break;
 
@@ -523,11 +516,9 @@ public class FinalReality extends Application {
                   Integer.parseInt(defense.getText()),
                   10
           );
-          System.out.println(controller.getPlayerCharacters());
           name.setText("");
           healthPoints.setText("");
           defense.setText("");
-          charactersNameClass.put(controller.getPlayerCharactersAlive(), "WhiteMage");
         });
         break;
     }
@@ -579,11 +570,11 @@ public class FinalReality extends Application {
                   Integer.parseInt(damage.getText()),
                   Integer.parseInt(weight.getText())
           );
-          System.out.println(controller.isWeaponInInventory(name.getText()));
           name.setText("");
           damage.setText("");
           weight.setText("");
         });
+        break;
 
       case "Create Bow":
         createWeaponButton.setOnAction(actionEvent -> {
@@ -592,11 +583,11 @@ public class FinalReality extends Application {
                   Integer.parseInt(damage.getText()),
                   Integer.parseInt(weight.getText())
           );
-          System.out.println(controller.isWeaponInInventory(name.getText()));
           name.setText("");
           damage.setText("");
           weight.setText("");
         });
+        break;
 
       case "Create Knife":
         createWeaponButton.setOnAction(actionEvent -> {
@@ -605,11 +596,11 @@ public class FinalReality extends Application {
                   Integer.parseInt(damage.getText()),
                   Integer.parseInt(weight.getText())
           );
-          System.out.println(controller.isWeaponInInventory(name.getText()));
           name.setText("");
           damage.setText("");
           weight.setText("");
         });
+        break;
 
       case "Create Staff":
         createWeaponButton.setOnAction(actionEvent -> {
@@ -619,11 +610,11 @@ public class FinalReality extends Application {
                   10,
                   Integer.parseInt(weight.getText())
           );
-          System.out.println(controller.isWeaponInInventory(name.getText()));
           name.setText("");
           damage.setText("");
           weight.setText("");
         });
+        break;
 
       case "Create Sword":
         createWeaponButton.setOnAction(actionEvent -> {
@@ -632,11 +623,11 @@ public class FinalReality extends Application {
                   Integer.parseInt(damage.getText()),
                   Integer.parseInt(weight.getText())
           );
-          System.out.println(controller.isWeaponInInventory(name.getText()));
           name.setText("");
           damage.setText("");
           weight.setText("");
         });
+        break;
     }
 
     GridPane characterPane = new GridPane();
@@ -653,41 +644,587 @@ public class FinalReality extends Application {
 
 
 
-  private @NotNull Scene equipCharacterScene() {
-    VBox equipCharacter = characterVboxForEquipCharacterScene();
+  private @NotNull Scene equipCharacterScene() throws FileNotFoundException {
+    Image backGroundImage = new Image(new FileInputStream("mediaFiles/summonersRiftMenu.png"));
+    ImageView backGround = new ImageView(backGroundImage);
+    backGround.fitWidthProperty().bind(window.widthProperty());
+    backGround.isPreserveRatio();
+    backGround.setViewOrder(0.5);
+    backGround.setOpacity(0.5);
+    backGround.setMouseTransparent(true);
+
+    Label characterTitle = new Label("Player Characters:");
+    characterTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane characterFlowPane = characterFlowPaneForEquipCharacterScene();
+    characterFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox characterVbox = new VBox();
+    characterVbox.setSpacing(10);
+    characterVbox.getChildren().addAll(characterTitle, characterFlowPane);
+    characterVbox.setAlignment(Pos.TOP_CENTER);
+
+    Label equipTitleLabel = new Label("You must equip all your\n" + "characters to start the game");
+    equipTitleLabel.setFont(new Font("Arial rounded Mt Bold", 25));
+
+    Label characterLabel = new Label("Enter character's name");
+    characterLabel.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label weaponLabel = new Label("Enter weapon's name");
+    weaponLabel.setFont(new Font("Arial rounded Mt Bold", 12));
+    HBox equipInstruction = new HBox();
+    equipInstruction.setSpacing(75);
+    equipInstruction.getChildren().addAll(characterLabel, weaponLabel);
+
+    TextField characterText = new TextField();
+    characterText.setFont(new Font("Arial rounded Mt Bold", 13));
+    characterText.setPromptText("Character's name");
+    characterText.setPrefWidth(150);
+    Label equipLabel = new Label("equip");
+    equipLabel.setFont(new Font("Arial rounded Mt Bold", 10));
+    TextField weaponText = new TextField();
+    weaponText.setFont(new Font("Arial rounded Mt Bold", 15));
+    weaponText.setPromptText("Weapon's name");
+    weaponText.setPrefWidth(150);
+    Button equipButton = new Button("Equip");
+    equipButton.setFont(new Font("Arial rounded Mt Bold", 15));
+    equipButton.setPrefWidth(75);
+    equipButton.setOnAction(event -> {
+      int characterPosition = controller.getCharactersPositionByName().get(characterText.getText()) - 1;
+      String weaponName = weaponText.getText();
+      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(characterPosition), controller.selectWeaponFromInventory(weaponName));
+      characterText.setText("");
+      weaponText.setText("");
+      try {
+        equipCharacterScene = equipCharacterScene();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      window.setScene(equipCharacterScene);
+    });
+    HBox equipTextFields = new HBox();
+    equipTextFields.setSpacing(30); //horizontal gap in pixels
+    equipTextFields.getChildren().addAll(characterText,equipLabel,weaponText,equipButton);
+
+    VBox equipLayout = new VBox();
+    equipLayout.getChildren().addAll(equipInstruction,equipTextFields);
+
+    Button mainMenuButton = new Button("Go back to main menu");
+    mainMenuButton.setFont(new Font("Arial rounded Mt Bold", 12));
+    mainMenuButton.setPrefWidth(150);
+    mainMenuButton.setOnAction(event ->
+            window.setScene(mainMenuScene));
+
+    Label startGameLabel = new Label("Now you can start the game!");
+    startGameLabel.setFont(new Font("Arial rounded Mt Bold", 20));
+    startGameLabel.setVisible(false);
+
+    Button startGameButton = new Button("Start Game");
+    startGameButton.setFont(new Font("Arial rounded Mt Bold", 15));
+    startGameButton.setPrefWidth(150);
+    startGameButton.setVisible(false);
+    startGameButton.setOnAction(event -> {
+      int partyHealthPoints = controller.getPartyHealthPoints();
+      int partyDefense = controller.getPartyDefense();
+      int partyAttackDamage = controller.getPartyAttackDamage();
+      int partyWeight = controller.getPartyWeight();
+      controller.createRandomEnemies(partyHealthPoints,partyDefense,partyAttackDamage,partyWeight);
+      controller.tryToStartGame();
+      try {
+        combatScene = combatScene();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      window.setScene(combatScene);
+    });
+
+    HBox startGameVbox = new HBox();
+    startGameVbox.setSpacing(15);
+    startGameVbox.getChildren().addAll(startGameLabel,startGameButton);
+
+    AnimationTimer timer = new AnimationTimer() {
+      @Override
+      public void handle(final long now) {
+        if(controller.partyIsEquipped()) {
+          startGameLabel.setVisible(true);
+          startGameButton.setVisible(true);
+        }
+      }
+    };
+    timer.start();
+
+    GridPane equipGridPane = new GridPane();
+    equipGridPane.setVgap(10); //vertical gap in pixels
+    equipGridPane.add(equipTitleLabel,0,20,1,1);
+    equipGridPane.add(equipLayout,0,24,1,1);
+    equipGridPane.add(mainMenuButton,0,26,1,1);
+    equipGridPane.add(startGameVbox,0,30,1,1);
+
+    Label weaponsTitle = new Label("Weapons:");
+    weaponsTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane weaponFlowPane = weaponFlowPaneForEquipCharacterScene();
+    weaponFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox weaponVbox = new VBox();
+    weaponVbox.setSpacing(10);
+    weaponVbox.getChildren().addAll(weaponsTitle, weaponFlowPane);
+    weaponVbox.setAlignment(Pos.TOP_CENTER);
+
+    HBox equipCharacter = new HBox();
+    equipCharacter.setSpacing(30); //horizontal gap in pixels
+    equipCharacter.setLayoutX(100);
+    equipCharacter.getChildren().addAll(characterVbox, equipGridPane, weaponVbox);
+
+    StackPane equipCharacterStackPane = new StackPane();
+    equipCharacterStackPane.getChildren().addAll(backGround, equipCharacter);
     // This sets the size of the Scene to be 1200px wide, 600px high
-    return new Scene(equipCharacter, 1200, 600);
+    return new Scene(equipCharacterStackPane, 1200, 600);
   }
 
-  private VBox characterVboxForEquipCharacterScene() {
-    VBox characterVbox = new VBox(15);
-
-    Label characterLabel = new Label("Player Characters:");
-    characterVbox.getChildren().add(characterLabel);
+  private FlowPane characterFlowPaneForEquipCharacterScene() {
+    FlowPane characterFlowPane = new FlowPane();
+    characterFlowPane.setHgap(15);
+    characterFlowPane.setVgap(15);
 
     VBox characterStats;
 
     for(int i=0; i<partySize; i++) {
-      String className = charactersNameClass.get(i+1);
+      String className = controller.getCharacterClassByIndex(i);
+      String name = controller.getPlayerCharacterNameByIndex(i);
+      int healthPoints = controller.getPlayerCharacterHealthByIndex(i);
+      int defense = controller.getPlayerCharacterDefenseByIndex(i);
+      String weaponName = controller.getNameOffEquippedWeaponByIndex(i);
+      characterStats = characterStatsForEquipCharacterScene(i+1, className, name, healthPoints, defense, weaponName);
+      characterFlowPane.getChildren().add(characterStats);
+    }
+    return characterFlowPane;
+  }
+
+  private VBox characterStatsForEquipCharacterScene(int position, String className, String name, int healthPoints, int defense, String weaponName) {
+    VBox characterStats = new VBox();
+    Label characterNumber = new Label("Character " + position);
+    characterNumber.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterClassName = new Label("Class: " + className);
+    characterClassName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterName = new Label("Name: " + name);
+    characterName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterHealthPoints = new Label("HealthPoints: " + healthPoints);
+    characterHealthPoints.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterDefense = new Label("Defense: " + defense);
+    characterDefense.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterWeaponName = new Label("Equipped Weapon: " + weaponName);
+    characterWeaponName.setFont(new Font("Arial rounded Mt Bold", 12));
+    characterStats.getChildren().addAll(characterNumber, characterClassName, characterName, characterHealthPoints, characterDefense, characterWeaponName);
+    return characterStats;
+  }
+
+  private FlowPane weaponFlowPaneForEquipCharacterScene() {
+    FlowPane weaponFlowPane = new FlowPane();
+    weaponFlowPane.setHgap(15);
+    weaponFlowPane.setVgap(15);
+
+    VBox weaponStats;
+    int numberOfWeapons = controller.getInventorySize();
+    ArrayList<String> weaponsName = controller.getWeaponsName();
+    for(int i=0; i<numberOfWeapons; i++) {
+      String name = weaponsName.get(i);
+      String className = controller.getWeaponClass(controller.selectWeaponFromInventory(name));
+      int damage = controller.getWeaponDamageOff(controller.selectWeaponFromInventory(name));
+      int weight = controller.getWeaponWeightOff(controller.selectWeaponFromInventory(name));
+      weaponStats = weaponStatsForEquipCharacterScene(i+1, className, name, damage, weight);
+      weaponFlowPane.getChildren().add(weaponStats);
+    }
+    return weaponFlowPane;
+  }
+
+  private VBox weaponStatsForEquipCharacterScene(int position, String className, String name, int damage, int weight) {
+    VBox weaponStats = new VBox();
+    Label weaponNumber = new Label("Weapon " + position);
+    weaponNumber.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label weaponClassName = new Label("Class: " + className);
+    weaponClassName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label weaponName = new Label("Name: " + name);
+    weaponName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label weaponDamage = new Label("Damage: " + damage);
+    weaponDamage.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label weaponWeight = new Label("Weight: " + weight);
+    weaponWeight.setFont(new Font("Arial rounded Mt Bold", 12));
+    weaponStats.getChildren().addAll(weaponNumber, weaponClassName, weaponName, weaponDamage, weaponWeight);
+    return weaponStats;
+  }
+
+
+  private Scene combatScene() throws FileNotFoundException {
+    Image backGroundImage = new Image(new FileInputStream("mediaFiles/summonersRiftMenu.png"));
+    ImageView backGround = new ImageView(backGroundImage);
+    backGround.fitWidthProperty().bind(window.widthProperty());
+    backGround.isPreserveRatio();
+    backGround.setViewOrder(0.5);
+    backGround.setOpacity(0.5);
+    backGround.setMouseTransparent(true);
+
+    Label characterTitle = new Label("Player Characters:");
+    characterTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane characterFlowPane = characterFlowPaneCombatScene();
+    characterFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox characterVbox = new VBox();
+    characterVbox.setSpacing(10);
+    characterVbox.getChildren().addAll(characterTitle, characterFlowPane);
+    characterVbox.setAlignment(Pos.TOP_CENTER);
+
+    Label turnLabel = new Label();
+    turnLabel.setFont(new Font("Arial rounded Mt Bold", 30));
+    VBox turnVbox = new VBox();
+    turnVbox.setAlignment(Pos.CENTER);
+    turnVbox.getChildren().add(turnLabel);
+
+    Label whatWillDoLabel = new Label();
+    whatWillDoLabel.setFont(new Font("Arial rounded Mt Bold", 25));
+
+    Label attackText = new Label("Attack Enemy");
+    attackText.setFont(new Font("Arial rounded Mt Bold", 22));
+
+    Label targetText = new Label("Enter target's name");
+    targetText.setFont(new Font("Arial rounded Mt Bold", 15));
+
+    TextField attackField = new TextField();
+    attackField.setFont(new Font("Arial rounded Mt Bold", 15));
+    attackField.setPromptText("Target's name");
+    attackField.setPrefWidth(150);
+
+    Button attackButton = new Button("Attack");
+    attackButton.setFont(new Font("Arial rounded Mt Bold", 15));
+    attackButton.setPrefWidth(85);
+    attackButton.setOnAction(event -> {
+      int targetPosition = controller.getEnemyPositionByName().get(attackField.getText()) - 1;
+      controller.tryToAttackCharacter(controller.getActiveICharacter(), controller.getEnemy(targetPosition));
+      attackField.setText("");
+      if(controller.isGameOverPhase()) { // Is Game Over Phase
+        gameOverScene = gameOverScene();
+        window.setScene(gameOverScene);
+      }
+      else { // Is Not Game Over Phase
+        try {
+          combatScene = combatScene();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
+        window.setScene(combatScene);
+      }
+    });
+
+    HBox attackHbox = new HBox();
+    attackHbox.setSpacing(30); //horizontal gap in pixels
+    attackHbox.getChildren().addAll(attackField, attackButton);
+
+    VBox attackInstruction = new VBox();
+    attackInstruction.getChildren().addAll(targetText, attackHbox);
+
+    VBox attackOption = new VBox();
+    attackOption.getChildren().addAll(attackText, attackInstruction);
+
+
+    Label changeWeaponText = new Label("Change weapon");
+    changeWeaponText.setFont(new Font("Arial rounded Mt Bold", 19));
+
+    Button changeWeaponButton = new Button("Go to Inventory");
+    changeWeaponButton.setFont(new Font("Arial rounded Mt Bold", 15));
+    changeWeaponButton.setPrefWidth(150);
+    changeWeaponButton.setVisible(true);
+    changeWeaponButton.setOnAction(actionEvent -> {
+      System.out.println(controller.isPlayerSelectingActionPhase());
+      System.out.println(controller.getCurrentPhaseName());
+      System.out.println(controller.getActiveICharacter().getName());
+      if(controller.isPlayerSelectingActionPhase() && controller.isPlayerCharacterTurn(controller.getActiveICharacter())) {
+        try {
+          changeWeaponScene = changeWeaponScene();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
+        window.setScene(changeWeaponScene);
+      }
+    });
+
+    VBox changeWeaponOption = new VBox();
+    changeWeaponOption.getChildren().addAll(changeWeaponText, changeWeaponButton);
+
+    VBox optionsHud = new VBox();
+    optionsHud.setAlignment(Pos.CENTER);
+    optionsHud.setSpacing(20);
+    optionsHud.setVisible(false);
+    optionsHud.getChildren().addAll(whatWillDoLabel, attackOption, changeWeaponOption);
+
+    VBox combatHud = new VBox();
+    combatHud.setAlignment(Pos.CENTER);
+    combatHud.setSpacing(30);
+    combatHud.getChildren().addAll(turnVbox, optionsHud);
+
+    AnimationTimer timer = new AnimationTimer() {
+      @Override
+      public void handle(final long now) {
+        optionsHud.setVisible(false);
+        if(controller.getActiveICharacter() == null) {
+          turnLabel.setText("Waiting for\n" + "characters cooldowns");
+        }
+        else { // A turn has start
+          turnCharacterName = controller.getNameFrom(controller.getActiveICharacter());
+          turnLabel.setText(turnCharacterName + "'s turn begin!");
+          if (controller.isPlayerCharacterTurn(controller.getActiveICharacter())) { // PlayerCharacter's turn
+            whatWillDoLabel.setText("What will " + turnCharacterName + " do?");
+            optionsHud.setVisible(true);
+          }
+          else { // Enemy's turn
+            if (controller.isGameOverPhase()) { // Is Game Over Phase
+              gameOverScene = gameOverScene();
+              window.setScene(gameOverScene);
+            }
+            else { // Is Not Game Over Phase
+              try {
+                combatScene = combatScene();
+              } catch (FileNotFoundException e) {
+                e.printStackTrace();
+              }
+              window.setScene(combatScene);
+            }
+          }
+        }
+      }
+    };
+    timer.start();
+
+    Label enemiesTitle = new Label("Enemies:");
+    enemiesTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane enemiesFlowPane = enemiesFlowPaneForCombatScene();
+    enemiesFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox enemiesVbox = new VBox();
+    enemiesVbox.setSpacing(10);
+    enemiesVbox.getChildren().addAll(enemiesTitle, enemiesFlowPane);
+    enemiesVbox.setAlignment(Pos.TOP_CENTER);
+
+    HBox combatHbox = new HBox();
+    combatHbox.setSpacing(30); //horizontal gap in pixels
+    combatHbox.setLayoutX(100);
+    combatHbox.getChildren().addAll(characterVbox, combatHud, enemiesVbox);
+
+    StackPane equipCharacterStackPane = new StackPane();
+    equipCharacterStackPane.getChildren().addAll(backGround, combatHbox);
+    // This sets the size of the Scene to be 1200px wide, 600px high
+    return new Scene(equipCharacterStackPane, 1200, 600);
+  }
+
+  private FlowPane characterFlowPaneCombatScene() {
+    FlowPane characterFlowPane = new FlowPane();
+    characterFlowPane.setHgap(15);
+    characterFlowPane.setVgap(15);
+
+    ArrayList<Integer> playerCharactersAliveIndex = controller.getPlayerCharactersAliveIndex();
+    VBox characterStats;
+
+    for(int i : playerCharactersAliveIndex) {
+      String className = controller.getCharacterClassByIndex(i);
       String name = controller.getPlayerCharacterNameByIndex(i);
       int healthPoints = controller.getPlayerCharacterDefenseByIndex(i);
       int defense = controller.getPlayerCharacterDefenseByIndex(i);
       String weaponName = controller.getNameOffEquippedWeaponByIndex(i);
-      characterStats = CharacterStatsForEquipCharacterScene(i+1, className, name, healthPoints, defense, weaponName);
-      characterVbox.getChildren().add(characterStats);
+      int attackDamage = controller.getPlayerCharacterAttackByIndex(i);
+      int weight = controller.getWeightOffEquippedWeaponByIndex(i);
+      characterStats = characterStatsForCombatScene(i+1, className, name, healthPoints, defense, weaponName,attackDamage,weight);
+      characterFlowPane.getChildren().add(characterStats);
     }
-    return characterVbox;
+    return characterFlowPane;
   }
 
-  private VBox CharacterStatsForEquipCharacterScene(int index,String className, String name, int healthPoints, int defense, String weaponName) {
+  private VBox characterStatsForCombatScene(int position, String className, String name, int healthPoints, int defense, String weaponName, int attackDamage, int weight) {
     VBox characterStats = new VBox();
-    Label characterNumber = new Label("Character " + index);
+    Label characterNumber = new Label("Character " + position);
+    characterNumber.setFont(new Font("Arial rounded Mt Bold", 12));
     Label characterClassName = new Label("Class: " + className);
+    characterClassName.setFont(new Font("Arial rounded Mt Bold", 12));
     Label characterName = new Label("Name: " + name);
+    characterName.setFont(new Font("Arial rounded Mt Bold", 12));
     Label characterHealthPoints = new Label("HealthPoints: " + healthPoints);
+    characterHealthPoints.setFont(new Font("Arial rounded Mt Bold", 12));
     Label characterDefense = new Label("Defense: " + defense);
+    characterDefense.setFont(new Font("Arial rounded Mt Bold", 12));
     Label characterWeaponName = new Label("Equipped Weapon: " + weaponName);
-    characterStats.getChildren().addAll(characterNumber, characterClassName, characterName, characterHealthPoints, characterDefense, characterWeaponName);
+    characterWeaponName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterAttackDamage = new Label("AttackDamage: " + attackDamage);
+    characterAttackDamage.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterWeight = new Label("Weight: " + weight);
+    characterWeight.setFont(new Font("Arial rounded Mt Bold", 12));
+    characterStats.getChildren().addAll(characterNumber, characterClassName, characterName, characterHealthPoints, characterDefense, characterWeaponName, characterAttackDamage, characterWeight);
     return characterStats;
+  }
+
+  private FlowPane enemiesFlowPaneForCombatScene() {
+    FlowPane enemiesFlowPane = new FlowPane();
+    enemiesFlowPane.setHgap(15);
+    enemiesFlowPane.setVgap(15);
+
+    ArrayList<Integer> enemiesAliveIndex = controller.getEnemiesAliveIndex();
+    VBox enemiesStats;
+
+    for(int i : enemiesAliveIndex) {
+      String className = controller.getEnemyClassByIndex(i);
+      String name = controller.getEnemyNameByIndex(i);
+      int healthPoints = controller.getEnemyHealthByIndex(i);
+      int defense = controller.getEnemyDefenseByIndex(i);
+      int attackDamage = controller.getEnemyAttackByIndex(i);
+      int weight = controller.getEnemyWeightByIndex(i);
+      enemiesStats = enemyStatsForCombatScene(i+1, className, name, healthPoints, defense, attackDamage, weight);
+      enemiesFlowPane.getChildren().add(enemiesStats);
+    }
+    return enemiesFlowPane;
+  }
+
+  private VBox enemyStatsForCombatScene(int position, String className, String name, int healthPoints, int defense, int attackDamage, int weight) {
+    VBox enemyStats = new VBox();
+    Label enemyNumber = new Label("Enemy " + position);
+    enemyNumber.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyClassName = new Label("Class: " + className);
+    enemyClassName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyName = new Label("Name: " + name);
+    enemyName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyHealthPoints = new Label("HealthPoints: " + healthPoints);
+    enemyHealthPoints.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyDefense = new Label("Defense: " + defense);
+    enemyDefense.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyAttackDamage = new Label("AttackDamage: " + attackDamage);
+    enemyAttackDamage.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label enemyWeight = new Label("Weight: " + weight);
+    enemyWeight.setFont(new Font("Arial rounded Mt Bold", 12));
+    enemyStats.getChildren().addAll(enemyNumber, enemyClassName, enemyName, enemyHealthPoints, enemyDefense, enemyAttackDamage, enemyWeight);
+    return enemyStats;
+  }
+
+  private Scene changeWeaponScene() throws FileNotFoundException {
+    Image backGroundImage = new Image(new FileInputStream("mediaFiles/summonersRiftMenu.png"));
+    ImageView backGround = new ImageView(backGroundImage);
+    backGround.fitWidthProperty().bind(window.widthProperty());
+    backGround.isPreserveRatio();
+    backGround.setViewOrder(0.5);
+    backGround.setOpacity(0.5);
+    backGround.setMouseTransparent(true);
+
+    Label characterTitle = new Label("Active Player Character:");
+    characterTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane characterFlowPane = characterFlowPaneForChangeWeaponScene();
+    characterFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox characterVbox = new VBox();
+    characterVbox.setSpacing(10);
+    characterVbox.getChildren().addAll(characterTitle, characterFlowPane);
+    characterVbox.setAlignment(Pos.TOP_CENTER);
+
+    Label equipTitleLabel = new Label("Enter the name off the\n" + "weapon that you want to equip");
+    equipTitleLabel.setFont(new Font("Arial rounded Mt Bold", 23));
+
+    Label weaponLabel = new Label("Enter weapon's name");
+    weaponLabel.setFont(new Font("Arial rounded Mt Bold", 12));
+
+    TextField weaponText = new TextField();
+    weaponText.setFont(new Font("Arial rounded Mt Bold", 15));
+    weaponText.setPromptText("Weapon's name");
+    weaponText.setPrefWidth(150);
+    Button equipButton = new Button("Equip");
+    equipButton.setFont(new Font("Arial rounded Mt Bold", 15));
+    equipButton.setPrefWidth(75);
+    equipButton.setOnAction(event -> {
+      String weaponName = weaponText.getText();
+      System.out.println(weaponName);
+      controller.tryToEquipPlayerCharacter((IPlayerCharacter)controller.getActiveICharacter(), controller.selectWeaponFromInventory(weaponName));
+      weaponText.setText("");
+      try {
+        changeWeaponScene = changeWeaponScene();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      window.setScene(changeWeaponScene);
+    });
+    HBox equipTextFields = new HBox();
+    equipTextFields.setSpacing(30); //horizontal gap in pixels
+    equipTextFields.getChildren().addAll(weaponText,equipButton);
+
+    VBox equipLayout = new VBox();
+    equipLayout.getChildren().addAll(equipTextFields);
+
+    Button combatButton = new Button("Go back to Combat");
+    combatButton.setFont(new Font("Arial rounded Mt Bold", 12));
+    combatButton.setPrefWidth(150);
+    combatButton.setOnAction(event -> {
+      try {
+        combatScene = combatScene();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      window.setScene(combatScene);
+    });
+
+    GridPane equipGridPane = new GridPane();
+    equipGridPane.setVgap(10); //vertical gap in pixels
+    equipGridPane.add(equipTitleLabel,0,22,1,1);
+    equipGridPane.add(equipLayout,0,24,1,1);
+    equipGridPane.add(combatButton,0,26,1,1);
+
+    Label weaponsTitle = new Label("Your weapons:");
+    weaponsTitle.setFont(new Font("Arial rounded Mt Bold", 20));
+    FlowPane weaponFlowPane = weaponFlowPaneForEquipCharacterScene();
+    weaponFlowPane.setAlignment(Pos.TOP_CENTER);
+    VBox weaponVbox = new VBox();
+    weaponVbox.setSpacing(10);
+    weaponVbox.getChildren().addAll(weaponsTitle, weaponFlowPane);
+    weaponVbox.setAlignment(Pos.TOP_CENTER);
+
+    HBox equipCharacter = new HBox();
+    equipCharacter.setSpacing(30); //horizontal gap in pixels
+    equipCharacter.setLayoutX(100);
+    equipCharacter.getChildren().addAll(characterVbox, equipGridPane, weaponVbox);
+
+    StackPane equipCharacterStackPane = new StackPane();
+    equipCharacterStackPane.getChildren().addAll(backGround, equipCharacter);
+    // This sets the size of the Scene to be 1200px wide, 600px high
+    return new Scene(equipCharacterStackPane, 1200, 600);
+  }
+
+  private FlowPane characterFlowPaneForChangeWeaponScene() {
+    FlowPane characterFlowPane = new FlowPane();
+    characterFlowPane.setHgap(15);
+    characterFlowPane.setVgap(15);
+
+    VBox characterStats;
+
+    String className = controller.getCharacterClassFrom(controller.getActiveICharacter());
+    String name = controller.getNameFrom(controller.getActiveICharacter());
+    int healthPoints = controller.getHealthPointsFrom(controller.getActiveICharacter());
+    int defense = controller.getDefenseFrom(controller.getActiveICharacter());
+    String weaponName = controller.getNameOffEquippedWeaponFrom((IPlayerCharacter) controller.getActiveICharacter());
+    int attackDamage = controller.getAttackDamageFrom(controller.getActiveICharacter());
+    int weight = controller.getWeightOffEquippedWeaponFrom((IPlayerCharacter) controller.getActiveICharacter());
+    characterStats = characterStatsForChangeWeaponScene(className, name, healthPoints, defense, weaponName, attackDamage, weight);
+    characterFlowPane.getChildren().add(characterStats);
+    return characterFlowPane;
+  }
+
+  private VBox characterStatsForChangeWeaponScene(String className, String name, int healthPoints, int defense, String weaponName, int attackDamage, int weight) {
+    VBox characterStats = new VBox();
+    Label characterClassName = new Label("Class: " + className);
+    characterClassName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterName = new Label("Name: " + name);
+    characterName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterHealthPoints = new Label("HealthPoints: " + healthPoints);
+    characterHealthPoints.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterDefense = new Label("Defense: " + defense);
+    characterDefense.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterWeaponName = new Label("Equipped Weapon: " + weaponName);
+    characterWeaponName.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterAttackDamage = new Label("AttackDamage: " + attackDamage);
+    characterAttackDamage.setFont(new Font("Arial rounded Mt Bold", 12));
+    Label characterWeight = new Label("Weight: " + weight);
+    characterWeight.setFont(new Font("Arial rounded Mt Bold", 12));
+    characterStats.getChildren().addAll(characterClassName, characterName, characterHealthPoints, characterDefense, characterWeaponName, characterAttackDamage, characterWeight);
+    return characterStats;
+  }
+
+  private Scene gameOverScene() {
+    Label gameOverLabel = new Label("Game Over");
+    StackPane gameOverPane = new StackPane();
+    gameOverPane.getChildren().add(gameOverLabel);
+    // This sets the size of the Scene to be 1200px wide, 600px high
+    return new Scene(gameOverPane, 1200, 600);
   }
 }

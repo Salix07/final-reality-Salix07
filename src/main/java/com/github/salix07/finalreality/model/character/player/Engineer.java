@@ -42,6 +42,12 @@ public class Engineer extends AbstractPlayerCharacter {
         weapon.equipToEngineer(this);
     }
 
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "Engineer";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

@@ -2,7 +2,10 @@ package com.github.salix07.finalreality.controller;
 
 import com.github.salix07.finalreality.model.weapon.IWeapon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Player's inventory.
@@ -50,4 +53,12 @@ public class Inventory {
      * Removes and returns the weapon saved in the inventory
      */
     public IWeapon removeWeaponFromInventory(String weaponName) { return inventory.remove(weaponName); }
+
+    public int getSize() {return inventory.size();}
+
+    public ArrayList<String> getWeaponsName() {
+        Set<String>  weaponsName = inventory.keySet();
+        return new ArrayList<>(weaponsName);
+
+    }
 }

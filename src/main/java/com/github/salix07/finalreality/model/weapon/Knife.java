@@ -51,6 +51,12 @@ public class Knife extends AbstractWeapon {
         thief.setEquippedWeapon(this);
     }
 
+    /**
+     * toString method, returns String representing the class of this weapon
+     */
+    @Override
+    public String toString() {return "Knife";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

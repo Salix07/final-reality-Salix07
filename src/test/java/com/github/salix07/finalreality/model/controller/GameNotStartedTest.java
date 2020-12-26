@@ -1,7 +1,6 @@
 package com.github.salix07.finalreality.model.controller;
 
 import com.github.salix07.finalreality.controller.GameController;
-import com.github.salix07.finalreality.controller.phases.Phase;
 import com.github.salix07.finalreality.model.character.Enemy;
 import com.github.salix07.finalreality.model.character.ICharacter;
 import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
@@ -51,7 +50,7 @@ public class GameNotStartedTest {
         assertTrue(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
         assertFalse(controller.getCurrentPhase().isGameOverPhase());
 
         assertEquals("Start Game Phase", controller.getCurrentPhaseName());
@@ -62,7 +61,7 @@ public class GameNotStartedTest {
         assertTrue(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
         assertFalse(controller.getCurrentPhase().isGameOverPhase());
 
         assertEquals("Start Game Phase", controller.getCurrentPhaseName());
@@ -84,7 +83,7 @@ public class GameNotStartedTest {
         assertFalse(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
         assertTrue(controller.getCurrentPhase().isGameOverPhase());
 
         assertEquals("Game Over Phase", controller.getCurrentPhaseName());

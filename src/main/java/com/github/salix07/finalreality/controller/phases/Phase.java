@@ -18,13 +18,15 @@ public class Phase {
 
     public void toWaitingForTurnPhase() {}
     public void toTurnPhase() {}
-    public void toSelectingActionPhase() {}
+    public void toPlayerSelectingActionPhase() {}
+    public void toEnemyActionPhase() {}
     public void toGameOverPhase() {}
 
     public boolean isStartGamePhase() {return false;}
     public boolean isWaitingForTurnPhase() {return false;}
     public boolean isTurnPhase() {return  false;}
-    public boolean isSelectingActionPhase() {return false;}
+    public boolean isPlayerSelectingActionPhase() {return false;}
+    public boolean isEnemyActionPhase() {return false;}
     public boolean isGameOverPhase() {return false;}
 
     public void tryToStartGame() { }

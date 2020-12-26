@@ -75,4 +75,9 @@ public interface ICharacter {
    * if the value is 0, it is an enemy and the turn will be enemy's one
    */
   int turnType();
+
+  /**
+   * toString method, returns a String representing the class of this character
+   */
+  String toString();
 }

@@ -51,7 +51,7 @@ public class WrongPhaseTest {
         assertTrue(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
         assertFalse(controller.getCurrentPhase().isGameOverPhase());
 
         // We can´t begin a turn, or attack
@@ -72,7 +72,7 @@ public class WrongPhaseTest {
         assertFalse(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
         assertTrue(controller.getCurrentPhase().isGameOverPhase());
 
         // We can´t create IPlayerCharacters or enemies

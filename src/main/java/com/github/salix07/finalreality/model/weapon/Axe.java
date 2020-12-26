@@ -42,6 +42,12 @@ public class Axe extends AbstractWeapon {
         knight.setEquippedWeapon(this);
     }
 
+    /**
+     * toString method, returns String representing the class of this weapon
+     */
+    @Override
+    public String toString() {return "Axe";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

@@ -54,4 +54,9 @@ public interface IWeapon {
      * All IWeapons will have a method to be equipped on a WhiteMage.
      */
     void equipToWhiteMage(WhiteMage whiteMage);
+
+    /**
+     * toString method, returns a String representing the class of this weapon
+     */
+    String toString();
 }
