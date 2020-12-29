@@ -26,13 +26,13 @@ public class WrongPhaseTest {
      */
     @BeforeEach
     void setUp() {
-        controller = new GameController(1, 1);
+        controller = new GameController(1, 1,10);
 
         controller.createKnight("Jarvan", 10, 5);
         controller.createEnemy("Troll", 10, 5, 15, 20);
 
         controller.createAxe("Storm Breaker", 15, 5);
-        controller.createSword("Infinity Edge", 10,5);
+        controller.createSword("Infinity Edge", 15,5);
 
         jarvan = controller.getPlayerCharacter(0);
         stormBreaker = controller.selectWeaponFromInventory("Storm Breaker");
@@ -47,12 +47,29 @@ public class WrongPhaseTest {
      */
     @Test
     void wrongPhaseTest() throws InterruptedException {
-        // The game start at StartGamePhase()
+        // The controller start at StartGamePhase
         assertTrue(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
-        assertFalse(controller.getCurrentPhase().isGameOverPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Waiting For Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Player Selecting Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Player Win Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Win Phase", controller.getCurrentPhaseName());
+
+        assertFalse(controller.isPlayerSelectingActionPhase());
+        assertFalse(controller.isEnemyActionPhase());
+        assertFalse(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
+
+
 
         // We can´t begin a turn, or attack
         controller.tryToBeginTurn();
@@ -65,20 +82,86 @@ public class WrongPhaseTest {
         assertTrue(troll.isAlive());
         assertEquals(10, troll.getHealthPoints());
 
+        // We are at StartGamePhase, then we can try to start the game
         controller.tryToStartGame();
         Thread.sleep(5000);
 
-        // Now the game is ended and the game is at GameOverPhase()
+        // Now we are at PlayerSelectingActionPhase
         assertFalse(controller.getCurrentPhase().isStartGamePhase());
         assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
         assertFalse(controller.getCurrentPhase().isTurnPhase());
-        assertFalse(controller.getCurrentPhase().isSelectingActionPhase());
-        assertTrue(controller.getCurrentPhase().isGameOverPhase());
+        assertTrue(controller.getCurrentPhase().isPlayerSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertNotEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Waiting For Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Turn Phase", controller.getCurrentPhaseName());
+        assertEquals("Player Selecting Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Player Win Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Win Phase", controller.getCurrentPhaseName());
+
+        assertTrue(controller.isPlayerSelectingActionPhase());
+        assertFalse(controller.isEnemyActionPhase());
+        assertFalse(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
+
+        // We can change weapons
+        controller.tryToEquipPlayerCharacter(jarvan, infinityEdge);
+
+        // And keep on PlayerSelectingActionPhase
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertTrue(controller.getCurrentPhase().isPlayerSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyActionPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertNotEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Waiting For Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Turn Phase", controller.getCurrentPhaseName());
+        assertEquals("Player Selecting Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Player Win Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Win Phase", controller.getCurrentPhaseName());
+
+        assertTrue(controller.isPlayerSelectingActionPhase());
+        assertFalse(controller.isEnemyActionPhase());
+        assertFalse(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
+
+        // We can attack
+        controller.tryToAttackCharacter(jarvan, troll);
+
+        // Now the game is ended and the game is at PlayerWinPhase()
+        assertFalse(controller.getCurrentPhase().isStartGamePhase());
+        assertFalse(controller.getCurrentPhase().isWaitingForTurnPhase());
+        assertFalse(controller.getCurrentPhase().isTurnPhase());
+        assertFalse(controller.getCurrentPhase().isPlayerSelectingActionPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyActionPhase());
+        assertTrue(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertNotEquals("Start Game Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Waiting For Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Turn Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Player Selecting Action Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Action Phase", controller.getCurrentPhaseName());
+        assertEquals("Player Win Phase", controller.getCurrentPhaseName());
+        assertNotEquals("Enemy Win Phase", controller.getCurrentPhaseName());
+
+        assertFalse(controller.isPlayerSelectingActionPhase());
+        assertFalse(controller.isEnemyActionPhase());
+        assertTrue(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
 
         // We can´t create IPlayerCharacters or enemies
         assertEquals(1, controller.getPlayerCharacters().size());
         controller.createBlackMage("Morgana", 10, 5, 5);
-        controller.createEngineer("Feto InJeniero", 10, 5);
+        controller.createEngineer("Feto Ingeniero", 10, 5);
         controller.createKnight("Darius", 10, 5);
         controller.createThief("Sebastián Piñera", 10, 5);
         controller.createWhiteMage("Lux", 10, 5, 5);
@@ -111,17 +194,26 @@ public class WrongPhaseTest {
         assertNull(nullWeapon);
 
         // We can't equip a character
-        assertEquals(stormBreaker, controller.getWeaponFrom(jarvan));
-        assertTrue(controller.isWeaponInInventory(infinityEdge.getName()));
-        controller.tryToEquipPlayerCharacter(jarvan, infinityEdge);
-        assertEquals(stormBreaker, controller.getWeaponFrom(jarvan));
-        assertTrue(controller.isWeaponInInventory(infinityEdge.getName()));
+        assertEquals(infinityEdge, controller.getWeaponFrom(jarvan));
+        assertTrue(controller.isWeaponInInventory(stormBreaker.getName()));
+        controller.tryToEquipPlayerCharacter(jarvan, stormBreaker);
+        assertEquals(infinityEdge, controller.getWeaponFrom(jarvan));
+        assertTrue(controller.isWeaponInInventory(stormBreaker.getName()));
 
         // We can´t begin the game
         assertFalse(controller.getCurrentPhase().isStartGamePhase());
-        assertTrue(controller.getCurrentPhase().isGameOverPhase());
+        assertTrue(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertTrue(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
+
         controller.tryToStartGame();
         assertFalse(controller.getCurrentPhase().isStartGamePhase());
-        assertTrue(controller.getCurrentPhase().isGameOverPhase());
+        assertTrue(controller.getCurrentPhase().isPlayerWinPhase());
+        assertFalse(controller.getCurrentPhase().isEnemyWinPhase());
+
+        assertTrue(controller.isPlayerWinPhase());
+        assertFalse(controller.isEnemyWinPhase());
     }
 }

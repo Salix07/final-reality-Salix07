@@ -107,4 +107,10 @@ public class WhiteMageTest extends AbstractPlayerCharacterTest{
             assertEquals(testStaff.getDamage(), character.getAttackDamage());
         }
     }
+
+    @Test
+    void toStringTest() {
+        String expectedString = "WhiteMage";
+        assertEquals(expectedString, testWhiteMage.toString());
+    }
 }

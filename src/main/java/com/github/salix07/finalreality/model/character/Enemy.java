@@ -18,7 +18,8 @@ public class Enemy extends AbstractCharacter {
   private final int weight;
 
   /**
-   * Creates a new enemy with a name, health points, defense, damage, weight and the queue with the characters ready to play.
+   * Creates a new enemy with a name, health points, defense, damage, weight
+   * and the queue with the characters ready to play.
    *
    * @param name
    *     the enemy's name
@@ -83,6 +84,12 @@ public class Enemy extends AbstractCharacter {
   public int turnType() {
     return 0; // int that represents this character class
   }
+
+  /**
+   * toString method, returns String representing the enemy class
+   */
+  @Override
+  public String toString() {return "Enemy";}
 
   @Override
   public boolean equals(final Object o) {

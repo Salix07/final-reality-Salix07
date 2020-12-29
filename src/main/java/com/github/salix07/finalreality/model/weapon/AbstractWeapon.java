@@ -84,6 +84,4 @@ public abstract class AbstractWeapon implements IWeapon {
    */
   @Override
   public void equipToWhiteMage(WhiteMage whiteMage) { }
-
-
 }

@@ -26,15 +26,15 @@ public interface ICharacter {
   void setHealthPoints(int healthPoints);
 
   /**
-   * Returns this character's defense.
-   */
-  int getDefense();
-
-  /**
    * Returns a boolean value depending on the character condition.
    * (True if the character is alive and false if the character is dead.)
    */
   boolean isAlive();
+
+  /**
+   * Returns this character's defense.
+   */
+  int getDefense();
 
   /**
    * Returns this character's attack damage.
@@ -75,4 +75,9 @@ public interface ICharacter {
    * if the value is 0, it is an enemy and the turn will be enemy's one
    */
   int turnType();
+
+  /**
+   * toString method, returns a String representing the class of this character
+   */
+  String toString();
 }

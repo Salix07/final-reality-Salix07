@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-
 public class Thief  extends AbstractPlayerCharacter {
 
     /**
@@ -32,6 +31,7 @@ public class Thief  extends AbstractPlayerCharacter {
                  @NotNull BlockingQueue<ICharacter> turnsQueue) {
         super(name, healthPoints, defense, turnsQueue);
     }
+
     // Thief specialization:
 
     /**
@@ -41,6 +41,12 @@ public class Thief  extends AbstractPlayerCharacter {
     public void equip(IWeapon weapon) {
         weapon.equipToThief(this);
     }
+
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "Thief";}
 
     @Override
     public boolean equals(final Object o) {

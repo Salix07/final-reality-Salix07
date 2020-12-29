@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-
 public class WhiteMage extends AbstractMage {
 
     /**
@@ -34,6 +33,7 @@ public class WhiteMage extends AbstractMage {
                      @NotNull BlockingQueue<ICharacter> turnsQueue) {
         super(name, healthPoints, defense, mana, turnsQueue);
     }
+
     // White Mage specialization:
 
     /**
@@ -43,6 +43,12 @@ public class WhiteMage extends AbstractMage {
     public void equip(IWeapon weapon) {
         weapon.equipToWhiteMage(this);
     }
+
+    /**
+     * toString method, returns String representing this Character
+     */
+    @Override
+    public String toString() {return "WhiteMage";}
 
     @Override
     public boolean equals(final Object o) {

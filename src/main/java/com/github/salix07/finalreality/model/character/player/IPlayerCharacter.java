@@ -9,7 +9,6 @@ import com.github.salix07.finalreality.model.weapon.IWeapon;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-
 public interface IPlayerCharacter extends ICharacter {
 
     /**

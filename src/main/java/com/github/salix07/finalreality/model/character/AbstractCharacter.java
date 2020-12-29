@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Sebastián Salinas Rodriguez.
  */
 public abstract class AbstractCharacter implements ICharacter {
-    // El equivalente a Observable.
-    // Pero en este caso es una propiedad o evento que puede cambiar en AbstractCharacter.
-    // A este evento le podemos agregar suscriptores (listeners) a los que se les informa cuando cambió
+    // The equivalent of Observable.
+    // But in this case it is a property or event that can change in AbstractCharacter.
+    // To this event we can add subscribers (listeners) who are informed when it changed.
     private final PropertyChangeSupport characterDeathEvent;
     private final PropertyChangeSupport addToQueueEvent;
 
@@ -35,8 +35,8 @@ public abstract class AbstractCharacter implements ICharacter {
      * @param turnsQueue   the queue with all the characters waiting for their turn
      */
     protected AbstractCharacter(@NotNull String name, int healthPoints, int defense, @NotNull BlockingQueue<ICharacter> turnsQueue) {
-        characterDeathEvent = new PropertyChangeSupport(this); // Asociar evento de muerte a este personaje
-        addToQueueEvent = new PropertyChangeSupport(this); // Asociar evento de agregar personaje a la cola
+        characterDeathEvent = new PropertyChangeSupport(this); //Associate death event to this character
+        addToQueueEvent = new PropertyChangeSupport(this); // Associate added to queue event
         this.name = name;
         this.healthPoints = healthPoints;
         this.defense = defense;
@@ -69,20 +69,20 @@ public abstract class AbstractCharacter implements ICharacter {
     }
 
     /**
-     * Returns this character's defense.
-     */
-    @Override
-    public int getDefense() {
-        return this.defense;
-    }
-
-    /**
      * Returns a boolean value depending on the character condition
      * (true if the character is alive and false if the character is dead.)
      */
     @Override
     public boolean isAlive() {
         return this.isAlive;
+    }
+
+    /**
+     * Returns this character's defense.
+     */
+    @Override
+    public int getDefense() {
+        return this.defense;
     }
 
     /**
@@ -107,21 +107,28 @@ public abstract class AbstractCharacter implements ICharacter {
             receivedDamage = 0; // set the dealt damage to 0
         }
 
-        this.setHealthPoints(currentHealthPoints - receivedDamage); // the character is damaged with the received damage
+        // the character is damaged with the received damage
+        this.setHealthPoints(currentHealthPoints - receivedDamage);
 
         if (this.getHealthPoints() <= 0) { // If the new health points are less than or equal to 0
             this.isAlive = false;  // the character is dead
-            characterDeathEvent.firePropertyChange("Character´s Death", null, this); // Notificar el cambio
+            characterDeathEvent.firePropertyChange(
+                    "Character´s Death", null, this
+            ); // Notify the change
         }
     }
 
     /**
-     * Adds this character to the turns queue.
+     * Adds this character to the turns queue only if the character is alive.
      */
     protected void addToQueue() {
-        turnsQueue.add(this);
-        scheduledExecutor.shutdown();
-        addToQueueEvent.firePropertyChange("Added to Queue", null, this); // Notificar el cambio
+        if (this.isAlive()) {
+            turnsQueue.add(this);
+            scheduledExecutor.shutdown();
+            addToQueueEvent.firePropertyChange(
+                    "Added to Queue", null, this
+            ); // Notify the change
+        }
     }
 
     /**

@@ -33,6 +33,7 @@ public abstract class AbstractMage extends AbstractPlayerCharacter implements IM
         super(name, healthPoints, defense, turnsQueue);
         this.mana = mana;
     }
+
     // Mage specialization:
 
     /**

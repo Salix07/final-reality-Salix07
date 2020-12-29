@@ -51,6 +51,12 @@ public class Staff extends AbstractWeapon {
      */
     public int getMagicDamage() { return this.magicDamage; }
 
+    /**
+     * toString method, returns String representing the class of this weapon
+     */
+    @Override
+    public String toString() {return "Staff";}
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

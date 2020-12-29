@@ -35,7 +35,7 @@ public class ControllerPartyTest {
      */
     @BeforeEach
     void setUp() {
-        controller = new GameController(5,1);
+        controller = new GameController(5,1,0);
 
         playerCharacters = controller.getPlayerCharacters();
         enemies = controller.getEnemies();
