@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-
 public class BlackMage extends AbstractMage {
 
     /**
@@ -34,6 +33,7 @@ public class BlackMage extends AbstractMage {
                      @NotNull BlockingQueue<ICharacter> turnsQueue) {
         super(name, healthPoints, defense, mana, turnsQueue);
     }
+
     // Black Mage specialization:
 
     /**

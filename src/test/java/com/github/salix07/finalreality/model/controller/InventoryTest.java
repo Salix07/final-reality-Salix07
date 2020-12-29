@@ -7,6 +7,8 @@ import com.github.salix07.finalreality.model.weapon.IWeapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -31,7 +33,7 @@ public class InventoryTest {
      */
     @BeforeEach
     void setUp() {
-        controller = new GameController(1, 0);
+        controller = new GameController(1, 0,5);
 
         controller.createKnight("Jarvan", 30, 5);
         playerCharacter0 = controller.getPlayerCharacter(0);
@@ -39,16 +41,40 @@ public class InventoryTest {
 
     @Test
     void inventoryTest() {
-        // At the beginning the inventory is empty
+        // At the beginning the inventory is empty and it's max size is 5
         assertTrue(controller.isInventoryEmpty());
+        assertFalse(controller.isInventoryFull());
+        assertEquals(5, controller.getInventoryMaxSize());
+
         // Weapons creation
         controller.createAxe("StormBreaker", 15,7);
         controller.createBow("Last Whisper", 10, 5);
         controller.createStaff("VoidStaff",1,10,5);
         controller.createSword("Infinity Edge",12,6);
         controller.createKnife("Duskblade of Draktharr", 5, 3);
-        // Now the inventory is not empty
+        ArrayList<String> realNames = controller.getWeaponsName();
+
+        // Check correct names of weapons stored
+        ArrayList<String> expectedNames = new ArrayList<>();
+        expectedNames.add("StormBreaker");
+        expectedNames.add("Last Whisper");
+        expectedNames.add("VoidStaff");
+        expectedNames.add("Infinity Edge");
+        expectedNames.add("Duskblade of Draktharr");
+        for(var expectedName : expectedNames) {
+            assertTrue(realNames.contains(expectedName));
+        }
+
+        // Now the inventory is not empty and there is 5 weapons stored
         assertFalse(controller.isInventoryEmpty());
+        assertEquals(5, controller.getInventorySize());
+
+        // As there are 5 weapons stored, the inventory is at max capacity,
+        // so we can't stored another weapon
+        assertTrue(controller.isInventoryFull());
+        controller.createAxe("BlackCleaver",20,5);
+        assertEquals(5,controller.getInventorySize());
+        assertFalse(controller.isWeaponInInventory("BlackCleaver"));
 
         // The IPlayerCharacters starts with no weapon
         assertNull(controller.getWeaponFrom(playerCharacter0));

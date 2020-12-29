@@ -148,4 +148,10 @@ class EnemyTest {
       assertEquals(0, enemy.getAttackDamage());
     }
   }
+
+  @Test
+  void toStringTest() {
+    String expectedString = "Enemy";
+    assertEquals(expectedString, testEnemy.toString());
+  }
 }

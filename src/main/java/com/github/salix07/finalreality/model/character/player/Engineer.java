@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Sebastián Salinas Rodriguez.
  */
-
 public class Engineer extends AbstractPlayerCharacter {
 
     /**
@@ -32,6 +31,7 @@ public class Engineer extends AbstractPlayerCharacter {
                     @NotNull BlockingQueue<ICharacter> turnsQueue) {
         super(name, healthPoints, defense, turnsQueue);
     }
+
     // Engineer specialization:
 
     /**

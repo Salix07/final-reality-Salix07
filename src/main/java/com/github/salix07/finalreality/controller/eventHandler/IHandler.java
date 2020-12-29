@@ -7,6 +7,5 @@ import java.beans.PropertyChangeListener;
  * The classes that extends this interface works as a subscriber of character´s events
  * @author Sebastián Salinas
  */
-
-public interface IHandler extends PropertyChangeListener { // Implementa la interfaz que se suscribe a los eventos
+public interface IHandler extends PropertyChangeListener { // Implements the interface that subscribes to events
 }

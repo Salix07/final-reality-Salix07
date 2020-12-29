@@ -26,15 +26,15 @@ public interface ICharacter {
   void setHealthPoints(int healthPoints);
 
   /**
-   * Returns this character's defense.
-   */
-  int getDefense();
-
-  /**
    * Returns a boolean value depending on the character condition.
    * (True if the character is alive and false if the character is dead.)
    */
   boolean isAlive();
+
+  /**
+   * Returns this character's defense.
+   */
+  int getDefense();
 
   /**
    * Returns this character's attack damage.

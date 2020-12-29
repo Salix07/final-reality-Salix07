@@ -49,4 +49,10 @@ public class StaffTest {
         assertEquals(MAGIC_DAMAGE, testStaff.getMagicDamage());
         assertEquals(SPEED, testStaff.getWeight());
     }
+
+    @Test
+    void toStringTest() {
+        String expectedString = "Staff";
+        assertEquals(expectedString, testStaff.toString());
+    }
 }

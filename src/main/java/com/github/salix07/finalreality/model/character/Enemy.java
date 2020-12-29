@@ -18,7 +18,8 @@ public class Enemy extends AbstractCharacter {
   private final int weight;
 
   /**
-   * Creates a new enemy with a name, health points, defense, damage, weight and the queue with the characters ready to play.
+   * Creates a new enemy with a name, health points, defense, damage, weight
+   * and the queue with the characters ready to play.
    *
    * @param name
    *     the enemy's name

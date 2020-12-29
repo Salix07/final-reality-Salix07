@@ -106,4 +106,10 @@ public class EngineerTest extends AbstractPlayerCharacterTest{
             assertEquals(testBow.getDamage(), character.getAttackDamage());
         }
     }
+
+    @Test
+    void toStringTest() {
+        String expectedString = "Engineer";
+        assertEquals(expectedString, testEngineer.toString());
+    }
 }

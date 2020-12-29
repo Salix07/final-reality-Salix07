@@ -110,4 +110,9 @@ public class ThiefTest extends AbstractPlayerCharacterTest{
             assertEquals(testSword.getDamage(), character.getAttackDamage());
         }
     }
+    @Test
+    void toStringTest() {
+        String expectedString = "Thief";
+        assertEquals(expectedString, testThief.toString());
+    }
 }

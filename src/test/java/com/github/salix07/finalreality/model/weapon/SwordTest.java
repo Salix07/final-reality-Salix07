@@ -45,4 +45,10 @@ public class SwordTest {
         assertEquals(DAMAGE, testSword.getDamage());
         assertEquals(SPEED, testSword.getWeight());
     }
+
+    @Test
+    void toStringTest() {
+        String expectedString = "Sword";
+        assertEquals(expectedString, testSword.toString());
+    }
 }

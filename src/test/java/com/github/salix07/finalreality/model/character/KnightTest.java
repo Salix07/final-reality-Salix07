@@ -110,4 +110,10 @@ public class KnightTest extends AbstractPlayerCharacterTest{
             assertEquals(testSword.getDamage(), character.getAttackDamage());
         }
     }
+
+    @Test
+    void toStringTest() {
+        String expectedString = "Knight";
+        assertEquals(expectedString, testKnight.toString());
+    }
 }

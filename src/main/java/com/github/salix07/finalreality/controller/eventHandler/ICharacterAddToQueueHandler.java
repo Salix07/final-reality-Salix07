@@ -1,8 +1,6 @@
 package com.github.salix07.finalreality.controller.eventHandler;
 
 import com.github.salix07.finalreality.controller.GameController;
-import com.github.salix07.finalreality.model.character.ICharacter;
-import com.github.salix07.finalreality.model.character.player.IPlayerCharacter;
 
 import java.beans.PropertyChangeEvent;
 
@@ -12,7 +10,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author Sebastián Salinas
  */
-public class ICharacterAddToQueueHandler implements IHandler { // Implementa la interfaz de Handlers
+public class ICharacterAddToQueueHandler implements IHandler { // Implements the IHandler interface
     private final GameController controller;
 
     /**
@@ -24,9 +22,9 @@ public class ICharacterAddToQueueHandler implements IHandler { // Implementa la 
     }
 
     /**
-     * Override del método de la interfaz PropertyChangeListener.
-     * Es llamado cuando se notifica de un cambio y recibe el evento que sufrió la modificación.
-     * (En este caso lo que hace es llamar al método addNewTurn() del controller)
+     * Override of the PropertyChangeListener interface method.
+     * It is called when a change is notified, receives the event that suffered the modification.
+     * (In this case what it does is call the controller's tryToTakeTurn method)
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
