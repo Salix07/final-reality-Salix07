@@ -37,6 +37,7 @@ public class FinalReality extends Application {
   private Stage window;
   private Scene setControllerScene, mainMenuScene, playerCreatorScene, weaponCreatorScene;
   private Scene equipCharacterScene, combatScene, changeWeaponScene, playerWinScene, enemyWinScene;
+  private Clip combatMusic, finalMusic;
   private boolean playingFinalMusic;
   private int partySize, enemyPartySize;
   private int weaponAttackDamage,weaponWeight;
@@ -53,8 +54,10 @@ public class FinalReality extends Application {
    *     Applications may create other stages, if needed, but they will not be primary stages.
    */
   @Override
-  public void start(Stage primaryStage) throws FileNotFoundException {
+  public void start(Stage primaryStage) throws FileNotFoundException, LineUnavailableException {
     window = primaryStage;
+    combatMusic = AudioSystem.getClip(); // Create an AudioStream from the InputStream
+    finalMusic = AudioSystem.getClip(); // Create an AudioStream from the InputStream
     partySize = 0;
     enemyPartySize = 0;
     turnCharacterName = "";
@@ -63,21 +66,6 @@ public class FinalReality extends Application {
     primaryStage.setTitle("Final Reality");
     primaryStage.setResizable(false);
     primaryStage.show();
-  }
-
-
-
-  private static void playSound(String audioFilePath) {
-    try {
-      Clip sound = AudioSystem.getClip();
-      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-              new File(audioFilePath))) {
-        sound.open(audioInputStream);
-        sound.start();
-      }
-    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-      e.printStackTrace();
-    }
   }
 
   private ImageView createBackGroundImage(String backGroundImagePath, double opacity) throws FileNotFoundException {
@@ -113,6 +101,107 @@ public class FinalReality extends Application {
     return button;
   }
 
+  // Play a sound using javax.sound and Clip interface
+  private static void playSound(String audioFilePath) {
+    try {
+      Clip sound = AudioSystem.getClip();
+      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+              new File(audioFilePath))) {
+        // Open a sound file stored in the project folder
+        sound.open(audioInputStream);
+        // Play the audio clip with the AudioPlayer class
+        sound.start();
+      }
+    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Play a sound using javax.sound and Clip interface
+  private void playCombatMusic(String audioFilePath) {
+    try {
+      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+              new File(audioFilePath))) {
+        // Open a sound file stored in the project folder
+        combatMusic.open(audioInputStream);
+        // Play the audio clip with the AudioPlayer class
+        combatMusic.start();
+      }
+    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Stop a sound from playing and clear out the line to play another sound if need be.
+  private void stopCombatMusic() {
+    // clip.stop() will only pause the sound and still leave the sound in the line
+    // waiting to be continued. It does not actually clear the line so a new action could be performed.
+    combatMusic.stop();
+    // clip.close(); will clear out the line and allow a new sound to play. clip.flush() was not
+    // used because it can only flush out a line of data already performed.
+    combatMusic.close();
+  }
+
+  // Play a sound using javax.sound and Clip interface
+  private void playFinalMusic(String audioFilePath) {
+    try {
+      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+              new File(audioFilePath))) {
+        // Open a sound file stored in the project folder
+        finalMusic.open(audioInputStream);
+        // Play the audio clip with the AudioPlayer class
+        finalMusic.start();
+      }
+    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Stop a sound from playing and clear out the line to play another sound if need be.
+  private void stopFinalMusic() {
+    // clip.stop() will only pause the sound and still leave the sound in the line
+    // waiting to be continued. It does not actually clear the line so a new action could be performed.
+    finalMusic.stop();
+    // clip.close(); will clear out the line and allow a new sound to play. clip.flush() was not
+    // used because it can only flush out a line of data already performed.
+    finalMusic.close();
+  }
+
+  private void generateGenericGame() {
+    playCombatMusic("src/main/resources/sounds/duelOfFates.wav");
+    controller = new GameController(5,10,10);
+    controller.createBlackMage("Morgana",350,20,10);
+    controller.createEngineer("Yop",400,40);
+    controller.createKnight("Jarvan",500,50);
+    controller.createThief("Pinera",250,10);
+    controller.createWhiteMage("Lux",300,15,10);
+    controller.createAxe("Storm Breaker",200, controller.getRandomWeaponWeight(200));
+    controller.createBow("Last Whisper",175, controller.getRandomWeaponWeight(175));
+    controller.createKnife("Yummu",100,controller.getRandomWeaponWeight(100));
+    controller.createStaff("Void Staff",150,10,controller.getRandomWeaponWeight(150));
+    controller.createSword("Infinity Edge",250,controller.getRandomWeaponWeight(250));
+    controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(0), controller.selectWeaponFromInventory("Yummu"));
+    controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(1), controller.selectWeaponFromInventory("Storm Breaker"));
+    controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(2), controller.selectWeaponFromInventory("Infinity Edge"));
+    controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(3), controller.selectWeaponFromInventory("Last Whisper"));
+    controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(4), controller.selectWeaponFromInventory("Void Staff"));
+    controller.createAxe("Black Cleaver",180, controller.getRandomWeaponWeight(180));
+    controller.createBow("Dominik's Remider",175, controller.getRandomWeaponWeight(175));
+    controller.createKnife("Drakktar",120,controller.getRandomWeaponWeight(120));
+    controller.createStaff("Rabadon",250,10,controller.getRandomWeaponWeight(250));
+    controller.createSword("Bloodthirsty",230,controller.getRandomWeaponWeight(230));
+    controller.createAxe("Tiamat",200, controller.getRandomWeaponWeight(200));
+    controller.createBow("Legolas Bow",250, controller.getRandomWeaponWeight(250));
+    controller.createKnife("Butter Knife",100,controller.getRandomWeaponWeight(100));
+    controller.createStaff("Zhonya",200,10,controller.getRandomWeaponWeight(200));
+    controller.createSword("Excalibur",250,controller.getRandomWeaponWeight(250));
+    int partyHealthPoints = controller.getPartyHealthPoints();
+    int partyDefense = controller.getPartyDefense();
+    int partyAttackDamage = controller.getPartyAttackDamage();
+    controller.createRandomEnemies(partyHealthPoints,partyDefense,partyAttackDamage);
+    controller.tryToStartGame();
+  }
+
 
 
   private @NotNull Scene setControllerScene() throws FileNotFoundException {
@@ -130,7 +219,7 @@ public class FinalReality extends Application {
             "you can choose a number between 1 and 5",25);
 
     TextField partySizeText = createArialRoundedMtBoldTextField(
-            "Recommended size: 3",25,300);
+            "Recommended size: 5",25,300);
 
     Button enterPartySize = createArialRoundedMtBoldButton(
             "Enter party size",25,300);
@@ -154,7 +243,7 @@ public class FinalReality extends Application {
             16);
 
     TextField enemyPartySizeText = createArialRoundedMtBoldTextField(
-            "Recommended amount: 6",20,300);
+            "Recommended amount: 10",20,300);
     Button enterEnemyPartySize = createArialRoundedMtBoldButton(
             "Enter amount of enemies",20,300);
     enterEnemyPartySize.setOnAction(actionEvent -> {
@@ -220,38 +309,7 @@ public class FinalReality extends Application {
     Button genericGameButton = createArialRoundedMtBoldButton("Generate generic game",10,130);
     genericGameButton.setOnAction(event -> {
       playSound("src/main/resources/sounds/pokemonButton.wav");
-      playSound("src/main/resources/sounds/duelOfFates.wav");
-      controller = new GameController(5,10,10);
-      controller.createBlackMage("Morgana",350,20,10);
-      controller.createEngineer("Yop",400,40);
-      controller.createKnight("Jarvan",500,50);
-      controller.createThief("Pinera",250,10);
-      controller.createWhiteMage("Lux",300,15,10);
-      controller.createAxe("Storm Breaker",200, controller.getRandomWeaponWeight(200));
-      controller.createBow("Last Whisper",175, controller.getRandomWeaponWeight(175));
-      controller.createKnife("Yummu",100,controller.getRandomWeaponWeight(100));
-      controller.createStaff("Void Staff",150,10,controller.getRandomWeaponWeight(150));
-      controller.createSword("Infinity Edge",250,controller.getRandomWeaponWeight(250));
-      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(0), controller.selectWeaponFromInventory("Yummu"));
-      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(1), controller.selectWeaponFromInventory("Storm Breaker"));
-      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(2), controller.selectWeaponFromInventory("Infinity Edge"));
-      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(3), controller.selectWeaponFromInventory("Last Whisper"));
-      controller.tryToEquipPlayerCharacter(controller.getPlayerCharacter(4), controller.selectWeaponFromInventory("Void Staff"));
-      controller.createAxe("Black Cleaver",180, controller.getRandomWeaponWeight(180));
-      controller.createBow("Dominik's Remider",175, controller.getRandomWeaponWeight(175));
-      controller.createKnife("Drakktar",120,controller.getRandomWeaponWeight(120));
-      controller.createStaff("Rabadon",250,10,controller.getRandomWeaponWeight(250));
-      controller.createSword("Bloodthirsty",230,controller.getRandomWeaponWeight(230));
-      controller.createAxe("Tiamat",200, controller.getRandomWeaponWeight(200));
-      controller.createBow("Legolas Bow",250, controller.getRandomWeaponWeight(250));
-      controller.createKnife("Butter Knife",100,controller.getRandomWeaponWeight(100));
-      controller.createStaff("Zhonya",200,10,controller.getRandomWeaponWeight(200));
-      controller.createSword("Excalibur",250,controller.getRandomWeaponWeight(250));
-      int partyHealthPoints = controller.getPartyHealthPoints();
-      int partyDefense = controller.getPartyDefense();
-      int partyAttackDamage = controller.getPartyAttackDamage();
-      controller.createRandomEnemies(partyHealthPoints,partyDefense,partyAttackDamage);
-      controller.tryToStartGame();
+      generateGenericGame();
       try {
         combatScene = combatScene();
       } catch (FileNotFoundException e) {
@@ -421,12 +479,24 @@ public class FinalReality extends Application {
     GridPane knightGrid = characterGridPane("Knight");
     GridPane thiefGrid = characterGridPane("Thief");
     GridPane whiteMageGrid = characterGridPane("WhiteMage");
+
+    Label balancedGameLabel = createArialRoundedMtBoldLabel("Recommended ranges for a balanced game",20);
+    Label healthPointsRange = createArialRoundedMtBoldLabel("HealthPoints: 250-500",17);
+    Label defenseRange = createArialRoundedMtBoldLabel("Defense: 10-50",17);
+    VBox balancedGameVBox = new VBox();
+    balancedGameVBox.setSpacing(5);
+    balancedGameVBox.getChildren().addAll(balancedGameLabel, healthPointsRange, defenseRange);
+
     Button mainMenuButton = createArialRoundedMtBoldButton(
             "Go back to main menu",18,300);
     mainMenuButton.setOnAction(event -> {
       playSound("src/main/resources/sounds/pokemonButton.wav");
       window.setScene(mainMenuScene);
     });
+
+    VBox bottomVBox = new VBox();
+    bottomVBox.setSpacing(30);
+    bottomVBox.getChildren().addAll(balancedGameVBox, mainMenuButton);
 
     AnimationTimer timer = new AnimationTimer() {
       @Override
@@ -450,7 +520,7 @@ public class FinalReality extends Application {
     playerCreatorPane.addRow(3, knightGrid);
     playerCreatorPane.addRow(3, thiefGrid);
     playerCreatorPane.addRow(4, whiteMageGrid);
-    playerCreatorPane.addRow(4, mainMenuButton);
+    playerCreatorPane.addRow(4, bottomVBox);
 
     StackPane playerCreatorStackPane = new StackPane();
     playerCreatorStackPane.getChildren().add(backGround);
@@ -496,12 +566,22 @@ public class FinalReality extends Application {
     GridPane staffGrid = weaponGridPane("Staff");
     GridPane swordGrid = weaponGridPane("Sword");
 
+    Label balancedGameLabel = createArialRoundedMtBoldLabel("Recommended range for a balanced game",20);
+    Label damageRange = createArialRoundedMtBoldLabel("Damage: 100-250",17);
+    VBox balancedGameVBox = new VBox();
+    balancedGameVBox.setSpacing(5);
+    balancedGameVBox.getChildren().addAll(balancedGameLabel, damageRange);
+
     Button mainMenuButton = createArialRoundedMtBoldButton(
             "Go back to main menu",18,300);
     mainMenuButton.setOnAction(event -> {
       playSound("src/main/resources/sounds/pokemonButton.wav");
       window.setScene(mainMenuScene);
     });
+
+    VBox bottomVBox = new VBox();
+    bottomVBox.setSpacing(30);
+    bottomVBox.getChildren().addAll(balancedGameVBox, mainMenuButton);
 
     GridPane weaponCreatorPane = new GridPane();
     weaponCreatorPane.setHgap(150); //horizontal gap in pixels
@@ -515,7 +595,7 @@ public class FinalReality extends Application {
     weaponCreatorPane.addRow(3, knifeGrid);
     weaponCreatorPane.addRow(3, staffGrid);
     weaponCreatorPane.addRow(4, swordGrid);
-    weaponCreatorPane.addRow(4, mainMenuButton);
+    weaponCreatorPane.addRow(4, bottomVBox);
 
     StackPane weaponCreatorStackPane = new StackPane();
     weaponCreatorStackPane.getChildren().add(backGround);
@@ -809,7 +889,7 @@ public class FinalReality extends Application {
     startGameButton.setVisible(false);
     startGameButton.setOnAction(event -> {
       playSound("src/main/resources/sounds/pokemonButton.wav");
-      playSound("src/main/resources/sounds/duelOfFates.wav");
+      playCombatMusic("src/main/resources/sounds/duelOfFates.wav");
       int partyHealthPoints = controller.getPartyHealthPoints();
       int partyDefense = controller.getPartyDefense();
       int partyAttackDamage = controller.getPartyAttackDamage();
@@ -976,6 +1056,7 @@ public class FinalReality extends Application {
       playSound("src/main/resources/sounds/zombieHurt.wav");
       if(controller.isPlayerWinPhase()) { // Is Game Over Phase
         try {
+          stopCombatMusic();
           playerWinScene = playerWinScene();
         } catch (FileNotFoundException e) {
           e.printStackTrace();
@@ -1054,6 +1135,7 @@ public class FinalReality extends Application {
           if(!controller.isPlayerCharacterTurn(controller.getActiveICharacter())) { // Enemy's turn
             if (controller.isEnemyWinPhase()) { // Enemy Win Phase
               try {
+                stopCombatMusic();
                 enemyWinScene = enemyWinScene();
               } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1278,7 +1360,7 @@ public class FinalReality extends Application {
 
     if(!playingFinalMusic) {
       playingFinalMusic = true;
-      playSound("src/main/resources/sounds/chileCampeon.wav");
+      playFinalMusic("src/main/resources/sounds/chileCampeon.wav");
     }
 
     ImageView backGround = createBackGroundImage(
@@ -1293,6 +1375,7 @@ public class FinalReality extends Application {
 
     Button playAgainButton = createArialRoundedMtBoldButton("Play Again",25,300);
     playAgainButton.setOnAction(event -> {
+      stopFinalMusic();
       playSound("src/main/resources/sounds/pokemonButton.wav");
       try {
         setControllerScene = setControllerScene();
@@ -1303,6 +1386,7 @@ public class FinalReality extends Application {
     });
     Button closeButton = createArialRoundedMtBoldButton("Close Game", 25,300);
     closeButton.setOnAction(event -> {
+      stopFinalMusic();
       playSound("src/main/resources/sounds/pokemonButton.wav");
       Platform.exit();
     });
@@ -1328,7 +1412,7 @@ public class FinalReality extends Application {
 
     if(!playingFinalMusic) {
       playingFinalMusic = true;
-      playSound("src/main/resources/sounds/sadnessAndSorrow.wav");
+      playFinalMusic("src/main/resources/sounds/sadnessAndSorrow.wav");
     }
 
     ImageView backGround = createBackGroundImage(
@@ -1343,6 +1427,7 @@ public class FinalReality extends Application {
 
     Button playAgainButton = createArialRoundedMtBoldButton("Play Again",25,300);
     playAgainButton.setOnAction(event -> {
+      stopFinalMusic();
       playSound("src/main/resources/sounds/pokemonButton.wav");
       try {
         setControllerScene = setControllerScene();
@@ -1353,6 +1438,7 @@ public class FinalReality extends Application {
     });
     Button closeButton = createArialRoundedMtBoldButton("Close Game", 25,300);
     closeButton.setOnAction(event -> {
+      stopFinalMusic();
       playSound("src/main/resources/sounds/pokemonButton.wav");
       Platform.exit();
     });
