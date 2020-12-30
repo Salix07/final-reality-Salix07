@@ -26,48 +26,61 @@ src/main/java/com.github.salix07/finalreality/gui y seleccionar la opción "run"
 Entrando más en detalle, la ventana mostrará un mensaje de bienvenida y un par de reglas, se te pedirá que ingreses la cantidad
 de personajes que formarán parte de tu equipo y la cantidad de enemigos que quieres enfrentar, debes rellenar los dos campos y
 hacer click en los botones "Enter party size" y "Enter amount of enemies", una vez ingresados estos datos aparecerá un botón
- de confirmación con el texto "Confirm", si se hace click en este botón se confirmarán los datos y se pasará al menu principal.
- Cabe destacar que en la esquina inferior izquierda hay un botón "Generate generic game", que generara una combate genérico
- entre 5 personajes aliados, equipados con sus respectivas armas, y 10 enemigos aleatorios.
+de confirmación con el texto "Confirm", si se hace click en este botón se confirmarán los datos y se pasará al menú principal.
+Cabe destacar que en la esquina inferior izquierda hay un botón "Generate generic game", que generara una combate genérico
+entre 5 personajes aliados, equipados con sus respectivas armas, y 10 enemigos aleatorios.
  
- Ya estando en el menu principal aparecerán 2 opciones, la primera te traslada a la escena de creación de personajes, en ella
- podrás crear la cantidad de personajes que escogiste al inicio, los personajes que puedes crear son
- Magos oscuros, Ingenieros, Caballeros, Ladrones y Magos blancos, debes elegirles un nombre, puntos de vida y defensa 
- (en la esquina inferior derecha hay un texto con los rangos adecuados de estos atributos para tener un juego bien balanceado).
- Si ya decidiste que personajes crear y que estadísticas darles debes hacer click en los botones de creación respectivos.
- Una vez creados todos tus personajes debes hacer click en el botón "Back to main menu", que te devolverá al menu principal.
+Ya estando en el menú principal aparecerán 2 opciones, la primera te traslada a la escena de creación de personajes, en ella
+podrás crear exactamente la cantidad de personajes que escogiste al inicio, los personajes que puedes crear son
+Magos oscuros, Ingenieros, Caballeros, Ladrones y Magos blancos, debes elegirles un nombre, puntos de vida y defensa 
+(en la esquina inferior derecha hay un texto con los rangos adecuados de estos atributos para tener un juego bien balanceado).
+Si ya decidiste que personajes crear y que estadísticas darles debes hacer click en los botones de creación respectivos.
+Una vez creados todos tus personajes debes hacer click en el botón "Back to main menu", que te devolverá al menú principal.
  
- la segunda opción del menu principal te traslada a la escena de creación de armas.
- Aquí de manera similar a la escena anterior puedes crear las armas que utilizaras durante el juego, las armas disponibles son
- Hachas, Arcos, Cuchillos, Bastones mágicos y Espadas, debes elegirles un nombre y el daño que realizan
- (nuevamente, de manera similar, en la esquina inferior derecha hay un texto con el rango adecuado para tener un juego bien balanceado).
- Si ya se decidió que armas crear se debe hacer click en los botones de creación respectivos.
- Y nuevamente está disponible un botón con el texto "Back to main menu", que te devuelve al menu principal.
+La segunda opción del menú principal te traslada a la escena de creación de armas.
+Aquí de manera similar a la escena anterior puedes crear las armas que utilizaras durante el juego, las armas disponibles son
+Hachas, Arcos, Cuchillos, Bastones mágicos y Espadas, debes elegirles un nombre y el daño que realizan
+(nuevamente, de manera similar, en la esquina inferior derecha hay un texto con el rango adecuado para tener un juego bien balanceado).
+Si ya se decidió que armas crear se debe hacer click en los botones de creación respectivos.
+Y nuevamente está disponible un botón con el texto "Back to main menu", que te devuelve al menú principal.
  
- Solo una vez creada la cantidad de personajes que se ingresó aparecerá una tercera opción en el menu principal,
- esta opción te lleva a la escena de equipamiento de armas, en ella puedes equipar a los personajes que creaste con las armas
- que también decidiste crear, pero no te preocupes si todavía no creas las armas ya que puedes volver al menu principal e ir
- a la escena de creación de armas y crearlas o continuar creando unas nuevas, siempre respetando la capacidad máxima de
- tu inventario (en este caso está configurado para soportar 2 armas por personaje creado). Cabe destacar que para equipar
- una arma a un personaje se debe ingresar el nombre del personaje en la caja de texto correspondiente, el nombre del arma
- en la caja de texto correspondiente y apretar el botón "equip"
+Solo una vez creada la cantidad de personajes que se ingresó aparecerá una tercera opción en el menú principal,
+esta opción te lleva a la escena de equipamiento de armas, en ella puedes equipar a los personajes que creaste con las armas
+que también decidiste crear, pero no te preocupes si todavía no creas las armas ya que puedes volver al menu principal e ir
+a la escena de creación de armas y crearlas o continuar creando unas nuevas, siempre respetando la capacidad máxima de
+tu inventario (en este caso está configurado para soportar 2 armas por personaje creado, por lo cual si creas armas y
+equipas a tus personajes es posible volver a llenar el inventario con las armas faltantes). Cabe destacar que para equipar
+una arma a un personaje se debe ingresar el nombre del personaje en la caja de texto correspondiente, el nombre del arma
+en la caja de texto correspondiente y apretar el botón "equip". Cabe recalcar que los personajes pueden equiparse ciertas
+armas o no dependiendo de su clase, a continuación haré un breve resumen:
+
+Mago Oscuro: Puede equiparse un Cuchillo y un Bastón
+Ingeniero: Puede equiparse un Hacha y un Arco
+Caballero: Puede equiparse un Hacha, un Cuchillo y una Espada
+Ladrón: Puede equiparse un Arco un Cuchillo y una Espada
+Mago Blanco: Puede equiparse un Bastón
+
  
- Una vez equipados todos los personajes aparecerá un botón con el texto "Start game", que comenzará el combate y te trasladará
- a la escena de combate. En ella podrás ver al lado izquierdo los personajes de tu equipo y sus datos,
- al lado derecho los enemigos y sus datos y al medio un historial con lo ocurrido en los turnos.
+Una vez equipados todos los personajes aparecerá un botón con el texto "Start game", que comenzará el combate y te trasladará
+a la escena de combate. En ella podrás ver al lado izquierdo los personajes de tu equipo y sus datos,
+al lado derecho los enemigos y sus datos y al centro un historial con las acciones ocurridas en los turnos.
  
- Cada vez que sea el turno de un personaje de tu equipo aparecerá un menu con las acciones que puedes realizar.
- La primera acción es la de atacar a un enemigo, si quieres realizar un ataque debes ingresar el nombre del enemigo y
- apretar el botón "attack". La segunda acción es para cambiar el arma que porta tu personaje,
- si quieres cambiarla debes hacer click en el botón "Go to inventory", esto te llevará a una escena en que se mostrará
- el personaje que es dueño del turno y las armas disponibles que hay en tu inventario.
- El equipamiento de la nueva arma se realiza de la misma manera que se hizo el equipamiento en la escena de equipamiento
- de personajes. Una vez conforme con el arma seleccionada se puede volver al combate con el botón "Go back to combat".
- El turno de tu personaje solo termina cuando realizar un ataque y puedes cambiar de armas cuantas veces quieras.
+Cada vez que sea el turno de un personaje de tu equipo aparecerá un menú con las acciones que puedes realizar.
+La primera acción es la de atacar a un enemigo, si quieres realizar un ataque debes ingresar el nombre del enemigo y
+apretar el botón "attack". Cabe destacar que cuando un personaje o enemigo muere este desaparece de las visual.
+Sin embargo si se recuerda el nombre es posible realizar un ataque a un enemigo muerto, este ataque no hará ningún efecto
+por lo cual perderás tu turno en vano, en el caso de los enemigos estos nunca atacarán a un personaje que esté muerto.
+La segunda acción es para cambiar el arma que porta tu personaje,
+si quieres cambiarla debes hacer click en el botón "Go to inventory", esto te llevará a una escena en que se mostrará
+el personaje que es dueño del turno y las armas disponibles que hay en tu inventario.
+El equipamiento de la nueva arma se realiza de la misma manera que se hizo el equipamiento en la escena de equipamiento
+de personajes. Una vez conforme con el arma seleccionada se puede volver al combate con el botón "Go back to combat".
+El turno de tu personaje solo termina cuando realizar un ataque y puedes cambiar de armas cuantas veces quieras.
  
- El combate terminará eventualmente y puedes ganar o perder, en ambos casos se mostrará una escena acorde a lo que haya
- ocurrido, en ella habrá un botón "Play again" que te traslada a la primera escena del juego para que puedas jugar de nuevo
- eligiendo una nueva cantidad de personajes y enemigos si quieres. Y un botón "Close game" que cierra el juego.
+El combate terminará eventualmente y puedes ganar o perder, en ambos casos se mostrará una escena acorde a lo que haya
+ocurrido, en ella habrá un botón "Play again" que te traslada a la primera escena del juego para que puedas jugar de nuevo
+eligiendo una nueva cantidad de personajes y enemigos, para posteriormente cambiar sus estadísticas si quieres.
+Y también un botón "Close game" que cierra el juego.
 
 ---
 
@@ -168,5 +181,21 @@ una (AxeTest, BowTest, KnifeTest, StaffTest, SwordTest).
 Para el controlador del juego, el inventario del jugador, los handler de eventos y las fases del juego simplemente se realizaron algunos test
 que simulaban una instancia de juego (equipamiento de armas y combates a muerte a través del sistema de turnos),
 donde se logró evaluar que la lógica estaba bien implementada.
+
+---
+
+Agradecimientos
+-------
+
+Por último me gustaría dar unos reconocimientos y agradecimientos por las imágenes y sonidos utilizados en la GUI del proyecto.
+Agradezco encarecidamente a Riot Games ya que utilicé algunas imágenes de sus videos de Youtube, las cuales fueron retocadas
+para dejarlas acorde a la temática del juego. A Game Freak y Nintendo por su característico sonido
+al momento de presionar los botones en los nostálgicos juegos de Pokemon, el cual también fue utilizado en este juego.
+A John Williams por su composición Duel Of Fates, la cual fue utilizada como música de fondo en el combate.
+A Markus Persson y Mojang Studios por el sonido al momento de recibir daño los enemigos y personajes del jugador.
+A Toshio Masuda por su composición Sadness and Sorrow, el octavo Soundtrack del álbum Naruto Original Soundtrack, ya que
+es utilizada un pequeño fragmento de esta en la escena de derrota del juego. Y por último a Claudio Palma
+por el inolvidable relato que realizo al comentar el penal de Alexis Sanchez que coronó a Chile como campeón de América en el 2015,
+ya que se utiliza un fragmento de este relato en la escena de victoria del juego.
 
 ---
