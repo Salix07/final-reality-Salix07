@@ -600,13 +600,14 @@ public class GameController {
                 addToTurnsLog(activeICharacter.getName() + " has begin his turn");
                 if (isPlayerCharacterTurn(activeICharacter)) { // turnType == 1 -> PlayerCharacter's turn
                     phase.toPlayerSelectingActionPhase();
-                } else { // turnType == 0 -> Enemy's turn, random attack a playerCharacter
+                }
+                else { // turnType == 0 -> Enemy's turn, random attack a playerCharacter
                     phase.toEnemyActionPhase();
                     IPlayerCharacter randomAliveTarget = randomAlivePlayerCharacter();
                     tryToAttackCharacter(activeICharacter, randomAliveTarget);
                 }
             }
-            else { // the turns owner id dead
+            else { // the turns owner iS dead
                 endTurn(activeICharacter);
             }
         }
