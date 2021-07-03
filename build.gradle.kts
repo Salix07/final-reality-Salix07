@@ -8,10 +8,10 @@ plugins {
 }
 
 application {
-    mainClassName = "$moduleName/com.github.cc3002.finalreality.gui.FinalReality"
+    mainClassName = "$moduleName/com.github.salistito.finalreality.gui.FinalReality"
 }
 
-group = "com.github.cc3002"
+group = "com.github.salistito"
 version = "1.0-RELEASE"
 
 repositories {
