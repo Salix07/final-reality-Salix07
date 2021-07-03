@@ -1,23 +1,30 @@
-Final Reality
-=============
+<h1>Final-Reality</h1>
 
-![http://creativecommons.org/licenses/by/4.0/](https://i.creativecommons.org/l/by/4.0/88x31.png)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg?style=flat)](http://creativecommons.org/licenses/by/4.0/)
+[![Language](https://img.shields.io/badge/Language-Java-blue.svg?style=flat)](https://www.java.com/en/)
+[![Use](https://img.shields.io/badge/Use-JavaFX-blue.svg?style=flat&)](https://openjfx.io)
+[![Release](https://img.shields.io/badge/Release-v1.0-green.svg?style=flat)](https://github.com/salistito/Final-Reality)
 
-This work is licensed under a 
-[Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/)
 
-Context
--------
+<h2>Table of contents</h2>
+
+- <a href="#context">Context</a>
+- <a href="#requirements-usage">Requirements and Usage (Quick Start)</a>
+- <a href="#game-details">Game Details:</a>
+    - <a href="#assumptions">Assumptions</a>
+    - <a href="#logic">Game Logic</a>
+- <a href="#credits">Credits</a>
+- <a href="#license">Copyright and License</a>
+
+<h2 id="context">Context</h2>
 
 This project's goal is to create a (simplified) clone of _Final Fantasy_'s combat, a game developed
 by [_Square Enix_](https://www.square-enix.com)
 Broadly speaking for the combat the player has a group of characters to control and a group of 
 enemies controlled by the computer.
 
----
 
-Uso
--------
+<h2 id="requirements-usage">Requirements and Usage (Quick Start)</h2>
 
 Para poder disfrutar de este juego primero debes descargar el código y abrir la carpeta descargada como un nuevo proyecto de
 IntelliJ, una vez cargado el proyecto debes hacer click derecho en la clase FinalReality ubicada en la ruta
@@ -82,10 +89,10 @@ ocurrido, en ella habrá un botón "Play again" que te traslada a la primera esc
 eligiendo una nueva cantidad de personajes y enemigos, para posteriormente cambiar sus estadísticas si quieres.
 Y también un botón "Close game" que cierra el juego.
 
----
 
-Supuestos Realizados
--------
+<h2 id="game-details">Game Details:</h2>
+
+<h3 id="assumptions">Assumptions</h3>
 
 Durante la realización de este proyecto se tomaron algunos supuestos que influyeron en la implementación del programa. 
 Primero que todo, se eliminaron las enumeraciones CharacterClass y WeaponType ya que aparte de no respetar
@@ -125,10 +132,9 @@ que contienen las clases, esto es debido a que los diagramas quedaban excesivame
 en el archivo pdf no se veían ni se entendían. Por lo cual se colocaron algunos diagramas UML de referencia en el resumen
 y los diagramas completos están subidos en este mismo repositorio en el directorio Diagrams/T3.
 
----
 
-Explicación del Funcionamiento y Lógica del Programa
--------
+
+<h3 id="logic">Game Logic</h3>
 
 Como se mencionó un poco más arriba, en este proyecto se analizó la jerarquía de clases que fueron entregadas en el código base.
 Donde si se encontraban errores y/o violaciones de los principios SOLID se debía modificar la jerarquía e realizar una nueva implementación.
@@ -182,10 +188,8 @@ Para el controlador del juego, el inventario del jugador, los handler de eventos
 que simulaban una instancia de juego (equipamiento de armas y combates a muerte a través del sistema de turnos),
 donde se logró evaluar que la lógica estaba bien implementada.
 
----
 
-Agradecimientos
--------
+<h2 id="credits">Credits</h2>
 
 Por último me gustaría dar unos reconocimientos y agradecimientos por las imágenes y sonidos utilizados en la GUI del proyecto.
 Agradezco encarecidamente a Riot Games ya que utilicé algunas imágenes de sus videos de Youtube, las cuales fueron retocadas
@@ -198,4 +202,10 @@ es utilizada un pequeño fragmento de esta en la escena de derrota del juego. Y 
 por el inolvidable relato que realizo al comentar el penal de Alexis Sanchez que coronó a Chile como campeón de América en el 2015,
 ya que se utiliza un fragmento de este relato en la escena de victoria del juego.
 
----
+
+<h2 id="license">Copyright and License </h2>
+
+![http://creativecommons.org/licenses/by/4.0/](https://i.creativecommons.org/l/by/4.0/88x31.png)
+
+This work is licensed under a 
+[Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/)
