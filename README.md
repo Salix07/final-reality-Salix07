@@ -156,7 +156,7 @@ This respects what the statement says because, although the number of player cha
 - Some pretty strong assumptions were made for the player's inventory:
     - If an attempt was made to equip a weapon to a character who cannot carry it, the weapon would remain available in inventory.
     - If an attempt is made to equip a weapon and the character can carry it, the weapon is removed from inventory so that it can be used by only one character at a time. 
-    - If a character already has a weapon equipped and an attempt is made to equip another weapon from the inventory, what happens is a weapons exchange, leaving the one that the character had equipped in the inventory and equipping him with the selected weapon
+    - If a character already has a weapon equipped and an attempt is made to equip another weapon from the inventory, what happens is a weapons swap, leaving the one that the character had equipped in the inventory and equipping him with the selected weapon
 
 
 - The UML diagrams don't contain all the methods, constructors or parameters that the classes contains, because the diagrams were excessively large and at the time of placing them, they were neither seen nor understood in the pdf file. Therefore, some reference UML diagrams were placed in the summary. And the complete diagrams are uploaded in this same repository in the directory Diagrams. 
@@ -177,7 +177,7 @@ This abstract class also implements another interface called IPlayerCharacterEqu
 This interface basically contains the methods that can equip a weapon to the PlayerCharacter, and another
 method that returns the weapon that is being equipped by a PlayerCharacter.
 
-To finish with the PlayerCharacter, subclasses were created
+To finish with PlayerCharacters, subclasses were created
 for all the characters that the player can control, they all inherit from AbstractPlayerCharacter and share its functionalities
 in common.
 
@@ -193,20 +193,20 @@ This Enemy class implements the ICharacter interface and contains all the behavi
 <h4>Weapons:</h4>
 
 For weapons, the IWeapon interface was created, it contains the common methods for all weapons, and the AbstractWeapon class, which implements this interface.
-Finally, subclasses were created for all weapons in the game (axe, bow, knife, staff, sword), them implement this abstract class and specialize their
+Also, subclasses were created for all weapons in the game (axe, bow, knife, staff, sword), them implement this abstract class and specialize their
 methods of "equipping the player" (the type is disambiguated thanks to the Double Dispatch). 
 
 
 <h4>Game Controller:</h4>
 
 The package called controller contains the game controller, the player's inventory, some handlers
-that handle different events of the game and the phases that the game has.
+that manage different events of the game and the phases that the game has.
 
 The controller is responsible for being an intermediary between what the user sees and the program model, so it has the ability to
 create player characters, enemies, weapons, know their attributes, manage player inventory, equip weapons, perform
 attacks, handling turn logic, etc.
 
-The inventory class only groups its methods, it is in a separate class to the controller,
+The inventory class only groups its methods, It is in a separate class to the controller
 only because it provided greater clarity and readability to the code.
 
 Handlers manage the events that happen during the game, they notify when
@@ -234,11 +234,10 @@ This class contains some tests that are in common for all PlayerCharacter.
 Also, specialized tests were created for each PlayerCharacter, which inherit from this abstract class.
 
 For the enemies, an EnemyTest was created. This class tests all their methods.
-For the weapons, specific tests were also created for each ne (AxeTest, BowTest, KnifeTest, StaffTest, SwordTest).
+For the weapons, specific tests were also created for each of them (AxeTest, BowTest, KnifeTest, StaffTest, SwordTest).
 
 For the game controller, player inventory, event handlers and game phases just a few tests were done.
-This test simulated an instance of the game (equipping weapons and combat to the death through the turn system),
-where it was possible to evaluate that the logic was well implemented. 
+This test simulated an instance of the game (weapon equipment, combat through the turn system, etc), where it was possible to evaluate that the logic was well implemented. 
 
 
 <h2 id="credits">Credits</h2>
@@ -246,15 +245,15 @@ where it was possible to evaluate that the logic was well implemented.
 Finally I would like to give thanks and credits for the images and sounds used in the project GUI.
 
 - I am very grateful to Riot Games as I used some images from their Youtube videos, which were retouched
-to leave them according to the game topic.
+to leave them according to the game esthetic.
 
 - Thanks to Game Freak and Nintendo for their distinctive sound at the time of pressing the buttons in the nostalgic Pokemon games, which was also used in this game.
 
-- Thanks to John Williams for his composition Duel Of Fates, which was used as background music in the combat scene.
+- Thanks to John Williams for his composition "Duel Of Fates", which was used as background music in the combat scene.
 
 - Thanks to Markus Persson and Mojang Studios for the sound when enemies and player characters take damage.
 
-- Thanks to Toshio Masuda for his composition Sadness and Sorrow, the eighth Soundtrack from the Naruto Original Soundtrack album, as a small fragment of it is used in the game's defeat scene.
+- Thanks to Toshio Masuda for his composition "Sadness and Sorrow", the eighth Soundtrack from the Naruto Original Soundtrack album, as a small fragment of it is used in the game's defeat scene.
 
 - And finally to Claudio Palma, for the unforgettable phrases he made when commenting on Alexis Sanchez's penalty that crowned Chile as champion of America in 2015,
 since a fragment of it is used in the game's victory scene. 
