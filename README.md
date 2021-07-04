@@ -3,14 +3,17 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg?style=flat)](http://creativecommons.org/licenses/by/4.0/)
 [![Language](https://img.shields.io/badge/Language-Java-blue.svg?style=flat)](https://www.java.com/en/)
 [![Use](https://img.shields.io/badge/Use-JavaFX-blue.svg?style=flat&)](https://openjfx.io)
+[![Use](https://img.shields.io/badge/Built_with-Gradle-orange.svg?style=flat&)](https://openjfx.io)
 [![Release](https://img.shields.io/badge/Release-v1.0-green.svg?style=flat)](https://github.com/salistito/Final-Reality)
 
 
 <h2>Table of contents</h2>
 
 - <a href="#context">Context</a>
-- <a href="#requirements-usage">Requirements and Usage (Quick Start)</a>
-- <a href="#game-details">Game Details:</a>
+- <a href="#instructions">Instructions</a>
+    - <a href="#quick-start">Quick Start</a>
+    - <a href="#gui">GUI Explanation and Game Details</a>
+- <a href="#homework-details">Homerwork Details</a>
     - <a href="#assumptions">Assumptions</a>
     - <a href="#logic">Game Logic</a>
 - <a href="#credits">Credits</a>
@@ -19,119 +22,134 @@
 <h2 id="context">Context</h2>
 
 This project's goal is to create a (simplified) clone of _Final Fantasy_'s combat, a game developed
-by [_Square Enix_](https://www.square-enix.com)
+by [_Square Enix_](https://www.square-enix.com). <br>
 Broadly speaking for the combat the player has a group of characters to control and a group of 
 enemies controlled by the computer.
 
 
-<h2 id="requirements-usage">Requirements and Usage (Quick Start)</h2>
+<h2 id="instructions">Instructions</h2>
 
-Para poder disfrutar de este juego primero debes descargar el código y abrir la carpeta descargada como un nuevo proyecto de
-IntelliJ, una vez cargado el proyecto debes hacer click derecho en la clase FinalReality ubicada en la ruta
-src/main/java/com.github.salix07/finalreality/gui y seleccionar la opción "run", esto abrirá una ventana y se mostrará la GUI del juego.
+<h3 id="quick-start">Quick Start</h3>
 
-Entrando más en detalle, la ventana mostrará un mensaje de bienvenida y un par de reglas, se te pedirá que ingreses la cantidad
-de personajes que formarán parte de tu equipo y la cantidad de enemigos que quieres enfrentar, debes rellenar los dos campos y
-hacer click en los botones "Enter party size" y "Enter amount of enemies", una vez ingresados estos datos aparecerá un botón
-de confirmación con el texto "Confirm", si se hace click en este botón se confirmarán los datos y se pasará al menú principal.
-Cabe destacar que en la esquina inferior izquierda hay un botón "Generate generic game", que generara una combate genérico
-entre 5 personajes aliados, equipados con sus respectivas armas, y 10 enemigos aleatorios.
- 
-Ya estando en el menú principal aparecerán 2 opciones, la primera te traslada a la escena de creación de personajes, en ella
-podrás crear exactamente la cantidad de personajes que escogiste al inicio, los personajes que puedes crear son
-Magos oscuros, Ingenieros, Caballeros, Ladrones y Magos blancos, debes elegirles un nombre, puntos de vida y defensa 
-(en la esquina inferior derecha hay un texto con los rangos adecuados de estos atributos para tener un juego bien balanceado).
-Si ya decidiste que personajes crear y que estadísticas darles debes hacer click en los botones de creación respectivos.
-Una vez creados todos tus personajes debes hacer click en el botón "Back to main menu", que te devolverá al menú principal.
- 
-La segunda opción del menú principal te traslada a la escena de creación de armas.
-Aquí de manera similar a la escena anterior puedes crear las armas que utilizaras durante el juego, las armas disponibles son
-Hachas, Arcos, Cuchillos, Bastones mágicos y Espadas, debes elegirles un nombre y el daño que realizan
-(nuevamente, de manera similar, en la esquina inferior derecha hay un texto con el rango adecuado para tener un juego bien balanceado).
-Si ya se decidió que armas crear se debe hacer click en los botones de creación respectivos.
-Y nuevamente está disponible un botón con el texto "Back to main menu", que te devuelve al menú principal.
- 
-Solo una vez creada la cantidad de personajes que se ingresó aparecerá una tercera opción en el menú principal,
-esta opción te lleva a la escena de equipamiento de armas, en ella puedes equipar a los personajes que creaste con las armas
-que también decidiste crear, pero no te preocupes si todavía no creas las armas ya que puedes volver al menu principal e ir
-a la escena de creación de armas y crearlas o continuar creando unas nuevas, siempre respetando la capacidad máxima de
-tu inventario (en este caso está configurado para soportar 2 armas por personaje creado, por lo cual si creas armas y
-equipas a tus personajes es posible volver a llenar el inventario con las armas faltantes). Cabe destacar que para equipar
-una arma a un personaje se debe ingresar el nombre del personaje en la caja de texto correspondiente, el nombre del arma
-en la caja de texto correspondiente y apretar el botón "equip". Cabe recalcar que los personajes pueden equiparse ciertas
-armas o no dependiendo de su clase, a continuación haré un breve resumen:
+- Download the repository
+- Open your favorite IDE that supports Gradle and open the repository as a new project
+- A Gradle build script will be found, select the option "Load Gradle Project", this will import the gradle build 
+- Run the "FinalReality" class located at `src/main/java/com.github.salistito/finalreality/gui/FinalReality`
+- Enjoy the game :)
 
-Mago Oscuro: Puede equiparse un Cuchillo y un Bastón
-Ingeniero: Puede equiparse un Hacha y un Arco
-Caballero: Puede equiparse un Hacha, un Cuchillo y una Espada
-Ladrón: Puede equiparse un Arco un Cuchillo y una Espada
-Mago Blanco: Puede equiparse un Bastón
+<h3 id="gui">GUI Explanation and Game Details</h3>
 
+After running the file a window will be displayed, it will show a welcome message and a couple of rules.
+You will be asked to enter the amount of characters that will be part of your team and the number of enemies you want to face, you must fill the two fields and
+click on the "Enter party size" and "Enter amount of enemies" buttons. Once these details have been entered, a confirmation button will appear,
+if you click on this button the data will be confirmed and you will go to the main menu.
+
+It should be noted that in the lower left corner there is a "Generate generic game" button, which will generate a generic combat
+between 5 allied characters, equipped with their respective weapons, and 10 random enemies.
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_1.png" width="825" height="500"/>
+
+Once in the main menu, 2 options will appear, the first one takes you to the character creation scene. 
+Here you can create exactly the amount of characters you chose at the beginning, the characters you can create are:
+- Black Mages
+- Engineers
+- Knights
+- Thiefs
+- White Mages
+
+You must choose a name, health points and defense (in the lower right corner there is a text with the appropriate ranges of these attributes to have a well balanced game).
+If you have already decided which characters to create and which statistics to give them, you must click on the respective creation buttons.
+Once all your characters have been created, you must click on the "Back to main menu" button, which will return you to the main menu. 
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_2.png" width="825" height="500"/>
  
-Una vez equipados todos los personajes aparecerá un botón con el texto "Start game", que comenzará el combate y te trasladará
-a la escena de combate. En ella podrás ver al lado izquierdo los personajes de tu equipo y sus datos,
-al lado derecho los enemigos y sus datos y al centro un historial con las acciones ocurridas en los turnos.
+The second option on the main menu takes you to the weapon creation scene.
+Here, in a similar way to the previous scene, you can create the weapons that you will use during the game, the available weapons are:
+- Axes
+- Bows
+- Knifes
+- Staffs
+- Swords
+
+You must choose a name and the damage they do (again, in the lower right corner there is a text with the proper range to have a well balanced game).
+If you have already decided which weapons to create and which statistics to give them, you must click on the respective creation buttons.
+Once all your weapons have been created, you must click on the "Back to main menu" button, which will return you to the main menu.  
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_3.png" width="825" height="500"/>
+
+Only when you create exactly the number of characters you choose at the beginning, a third option will appear in the main menu.
+This option takes you to the "equip weapon" scene, here you can equip the characters you created with the weapons
+which you also decided to create. Don't worry if you haven't created the weapons yet, you can go back to the main menu and go
+to the weapon creation scene and create them or continue creating new ones, always respecting the maximum capacity of
+your inventory (in this case it is configured to support 2 weapons per character created, so if you create weapons and
+equip your characters it is possible to refill the inventory with the missing weapons).
+
+To equip a weapon to a character you must enter the name of the character and the name of the weapon
+in the corresponding text box and press the button "equip". Characters can equip certain
+weapons depending on their class:
+
+- Black Mage: can equip a knife and a staff
+- Engineer: can equip an Axe and a Bow
+- Knight: can equip an Axe, a Knife and a Sword
+- Thief: can equip a Bow, a Knife and a Sword
+- White Mage: Can equip a Staff 
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_5.png" width="825" height="500"/>
  
-Cada vez que sea el turno de un personaje de tu equipo aparecerá un menú con las acciones que puedes realizar.
-La primera acción es la de atacar a un enemigo, si quieres realizar un ataque debes ingresar el nombre del enemigo y
-apretar el botón "attack". Cabe destacar que cuando un personaje o enemigo muere este desaparece de las visual.
-Sin embargo si se recuerda el nombre es posible realizar un ataque a un enemigo muerto, este ataque no hará ningún efecto
-por lo cual perderás tu turno en vano, en el caso de los enemigos estos nunca atacarán a un personaje que esté muerto.
-La segunda acción es para cambiar el arma que porta tu personaje,
-si quieres cambiarla debes hacer click en el botón "Go to inventory", esto te llevará a una escena en que se mostrará
-el personaje que es dueño del turno y las armas disponibles que hay en tu inventario.
-El equipamiento de la nueva arma se realiza de la misma manera que se hizo el equipamiento en la escena de equipamiento
-de personajes. Una vez conforme con el arma seleccionada se puede volver al combate con el botón "Go back to combat".
-El turno de tu personaje solo termina cuando realizar un ataque y puedes cambiar de armas cuantas veces quieras.
+Once all characters are equipped, a "Start game" button will appear. The button will start the fight and take you
+to the combat scene. Here you will see on the left side the characters of your team and their data,
+on the right side the enemies and their data and in the center a history with the actions that occurred in the turns.
  
-El combate terminará eventualmente y puedes ganar o perder, en ambos casos se mostrará una escena acorde a lo que haya
-ocurrido, en ella habrá un botón "Play again" que te traslada a la primera escena del juego para que puedas jugar de nuevo
-eligiendo una nueva cantidad de personajes y enemigos, para posteriormente cambiar sus estadísticas si quieres.
-Y también un botón "Close game" que cierra el juego.
+Every time it is the turn of a character of your team, a menu will appear with the actions you can perform.
+
+The first action is to attack an enemy, if you want to make an attack you must enter the name of the enemy and
+press the "attack" button. When a character or enemy dies, it disappears from the visual.
+However, if the name is remembered it is possible to make an attack on a dead enemy, this attack will not have any effect
+for which you will lose your turn in vain, in the case of enemies they will never attack a character that is dead. 
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_6.png" width="825" height="500"/>
+
+The second action is to change the weapon that your character carries.
+If you want to change the weapon, click on the "Go to inventory" button, this will take you to a scene where it will be shown
+the character who owns the turn and the available weapons in your inventory.
+The equipping of the new weapon is done in the same way as the equipping was done in the "equip weapon" scene.
+Once you are satisfied with the selected weapon, you can return to combat with the "Go back to combat" button.
+Your character's turn only ends when they make an attack and you can change weapons as many times as you want. 
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_7.png" width="825" height="500"/>
+ 
+The combat will eventually end, you can win or lose, in both cases a scene will be shown according to what has happened.
+There will be a "Play again" button that takes you to the first scene of the game so you can play again
+choosing a new amount of characters and enemies, and also a "Close game" button that closes the game. 
+
+<img src="https://github.com/salistito/Final-Reality/blob/master/Preview/Game_Images/Screenshot_8.png" width="825" height="500"/>
 
 
-<h2 id="game-details">Game Details:</h2>
+<h2 id="homework-details">Homework Details:</h2>
 
 <h3 id="assumptions">Assumptions</h3>
 
-Durante la realización de este proyecto se tomaron algunos supuestos que influyeron en la implementación del programa. 
-Primero que todo, se eliminaron las enumeraciones CharacterClass y WeaponType ya que aparte de no respetar
-algunos principios SOLID estas enumeraciones no son tan útiles al momento de necesitar una futura especialización 
-de Characters o de Weapons.
+During the execution of this project, some assumptions were made that influenced on the final implementation of the program.
 
-Por otro lado, como en la descripción del proyecto no se hace alusión a hechizos o armas que bajen la defensa ó otros atributos
-que no sean la vida de los personajes se consideró que los atributos nombre, defensa y la clase de cada playerCharacter se mantendrá
-constante durante el juego, y en consiguiente se definieron como finales. 
-Al igual que los atributos nombre, defensa, ataque, peso de cada Enemy, y los atributos nombre, ataque, peso
-(también el daño mágico en el caso del bastón) y clase de cada Weapon.
+- CharacterClass and WeaponType enumerations were removed, because them didn't respect some SOLID principles and these enumerations aren't so useful when you need a future specialization of Characters or Weapons.
 
-Esto nos deja en que los unicos atributos modificables durante el juego serán la vida de todos los personajes 
-(y él mana en el caso de los magos).
+- In the description of the project is no allusion to spells or weapons that reduced defense or other attributes than character's health points.
+So, the attributes that will be kept constant throughout the game (defined as finals) will be:
+    - name, defense and class of each playerCharacter
+    - name, defense, attack, weight of each Enemy
+    - name, attack, weight, (magic damage in the case of the staff) and class of each Weapon
+    
+- The only modifiable attributes during the game will be the character's health points (and the mana in the case of mages).
+- A thief can equip swords, bows or knifes but not staffs (because it makes more sense that a thief can carry a knife and not a magic staff.)
 
-Al momento de implementar las armas y a que tipos de personajes del jugador se podían equipar se decidió que el ladrón
-pueda equiparse espadas, arcos y cuchillos, y no espadas, arcos y bastones. Esto último por que hace más sentido
-que un ladrón pueda portar un cuchillo y no un bastón mágico.
+- The game controller let the user decide the number of characters in the party, and how many enemies there will be.
+This respects what the statement says because, although the number of player characters it's decided by the user, this amount is fixed during that game instance and it's ensured that it's exactly that before start the game. On the enemy side, what is said in the statement is also respected because, although the number of enemies is decided by the user, these enemies are generated with random attributes and they change in each game instance.
 
-Con respecto al controlador del juego, me pareció que era buena idea dejar que el usuario decidiera con la cantidad de personajes
-que quisiera jugar, y la cantidad de enemigos que quisiera enfrentar.
-Esto respeta lo que dice el enunciado ya que si bien la cantidad de personajes del jugador
-la decide el usuario, esta cantidad es fija durante esa instancia de juego y se asegura que sea exactamente esa antes de
-dar inicio al mismo. 
-Por el lado de los enemigos también se respeta lo dicho en el enunciado, ya que si bien la cantidad de enemigos la
-decide el usuario, estos enemigos terminan siendo generados con atributos aleatorios y varían en cada instancia de juego.
-
-Cabe mencionar que para el inventario del jugador se tomaron algunos supuestos bastante fuertes.
-Primero, si se intenta equipar un arma a un personaje que no puede llevarla, se decidió que el arma siga disponible en el inventario.
-Si se intenta equipar un arma y efectivamente el personaje puede llevarla, el arma se remueve del inventario de forma
-que solo pueda ser utilizada por un personaje a la vez. Por último si un personaje ya tiene equipada un arma y 
-se intenta equipar otra arma del inventario lo que sucede es un intercambio de armas, dejando
-la que tenía equipada el personaje en el inventario y equipándole el arma seleccionada 
-
-Por último, los diagramas UML entregados en el resumen no contienen todas los métodos, constructores y parámetros
-que contienen las clases, esto es debido a que los diagramas quedaban excesivamente grandes y al momento de colocarlos
-en el archivo pdf no se veían ni se entendían. Por lo cual se colocaron algunos diagramas UML de referencia en el resumen
-y los diagramas completos están subidos en este mismo repositorio en el directorio Diagrams/T3.
-
+- It should be mentioned that some pretty strong assumptions were made for the player's inventory:
+    - If an attempt was made to equip a weapon to a character who cannot carry it, the weapon would remain available in inventory.
+    - If an attempt is made to equip a weapon and the character can carry it, the weapon is removed from inventory so that it can be used by only one character at a time. 
+    - If a character already has a weapon equipped and an attempt is made to equip another weapon from the inventory, what happens is a weapons exchange, leaving the one that the character had equipped in the inventory and equipping him with the selected weapon
+    - The UML diagrams don't contain all the methods, constructors or parameters that the classes contain, because the diagrams were excessively large and at the time of placing them, they were neither seen nor understood in the pdf file. Therefore, some reference UML diagrams were placed in the summary. And the complete diagrams are uploaded in this same repository in the directory Diagrams / T3. 
 
 
 <h3 id="logic">Game Logic</h3>
